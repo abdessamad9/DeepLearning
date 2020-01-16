@@ -10,8 +10,8 @@ namespace NeuralNetwork.Common.Activators
         {
 
         }
-        public Func<double, double> Apply => d => (exp(d) - exp(-d))/(exp(d) + exp(-d));
-        public Func<double, double> ApplyDerivative => d => 1-((exp(d) - exp(-d)) / (exp(d) + exp(-d))) * ((exp(d) - exp(-d)) / (exp(d) + exp(-d)));
+        public Func<double, double> Apply => d => (Math.Exp(d) - Math.Exp(-d))/(Math.Exp(d) + Math.Exp(-d));
+        public Func<double, double> ApplyDerivative => d => 1-((Math.Exp(d) - Math.Exp(-d)) / (Math.Exp(d) + Math.Exp(-d))) * ((Math.Exp(d) - Math.Exp(-d)) / (Math.Exp(d) + Math.Exp(-d)));
 
         public ActivatorType Type => ActivatorType.Tanh;
     }

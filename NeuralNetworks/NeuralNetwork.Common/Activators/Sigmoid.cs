@@ -10,8 +10,8 @@ namespace NeuralNetwork.Common.Activators
         {
 
         }
-        public Func<double, double> Apply => d => 1.0/(1.0+exp(-d));
-        public Func<double, double> ApplyDerivative => d => 1.0 / (1.0 + exp(-d)) * (1.0- 1.0 / (1.0 + exp(-d))) ;
+        public Func<double, double> Apply => d => 1.0/(1.0+Math.Exp(-d));
+        public Func<double, double> ApplyDerivative => d => 1.0 / (1.0 + Math.Exp(-d)) * (1.0- 1.0 / (1.0 + Math.Exp(-d))) ;
 
         public ActivatorType Type => ActivatorType.Sigmoid;
     }

@@ -1,26 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
+using NeuralNetwork.Common.Activators;
+
 
 namespace NeuralNetwork.Common.Layers
 {
     class Dropout:ILayer
     {
-        public Dropout(int LayerSize, int InputSize, int BatchSize, IActivator Activator, Matrix<double> Bias, Matrix<double> Activation, Matrix<double> WeightedError)
+        public Dropout(int layerSize, int inputSize, int batchSize, IActivator activator, Matrix<double> bias, Matrix<double> activation, Matrix<double> weightedError)
         {
-            LayerSize = LayerSize;
-            InputSize = InputSize;
-            BatchSize = BatchSize;
-            Activator = Activator;
-            Bias = Bias;
-            Activation = Activation;
-            WeightedError = WeightedError;
+            LayerSize = layerSize;
+            InputSize = inputSize;
+            BatchSize = batchSize;
+            Activator = activator;
+            Bias = bias;
+            Activation = activation;
+            WeightedError = weightedError;
         }
+
+        
         public int LayerSize
         {
             get
             {
                 return LayerSize;
+            }
+            set
+            {
+                this.LayerSize = value;
             }
         }
         public int InputSize
@@ -29,13 +39,21 @@ namespace NeuralNetwork.Common.Layers
             {
                 return InputSize;
             }
+            set
+            {
+                this.InputSize = value;
+            }
         }
 
-        public Identity Activator
+        public IActivator Activator
         {
             get
             {
                 return Activator;
+            }
+            set
+            {
+                this.Activator = value;
             }
         }
 
@@ -82,15 +100,18 @@ namespace NeuralNetwork.Common.Layers
             {
                 return WeightedError;
             }
+            set
+            {
+                this.WeightedError = value;
+            }
         }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
-            Matrix<double> zeta = WeightedError.Transpose() * input + Bias;
-            zeta.map(Activator.ApplyDerivative);
-            PointwiseMultiply(zeta, upstreamWeightedErrors);
-            UpdateParameters();
-
+            Matrix<double> zeta = WeightedError.Transpose() * Activation + Bias;
+            zeta.Map(Activator.ApplyDerivative);
+            upstreamWeightedErrors.PointwiseMultiply(zeta);
+            UpdateParameters(upstreamWeightedErrors);
 
         }
 
@@ -102,15 +123,25 @@ namespace NeuralNetwork.Common.Layers
         public void Propagate(Matrix<double> input)
         {
             System.Diagnostics.Debug.Assert(input.RowCount == 1 && input.ColumnCount == LayerSize, "Dimensions incompatibles");
-
             Activation = WeightedError.Transpose() * input + Bias;
             Activation.Map(Activator.Apply);
         }
 
         public void UpdateParameters()
         {
+            /* Matrix<double> upstreamWeightedErrors = null;
+
+
+             WeightedError.Add(-0.1 / BatchSize * Activation * upstreamWeightedErrors.Transpose());
+             Bias.Add(-0.1 / BatchSize * upstreamWeightedErrors.RowSums());*/
+        }
+
+        public void UpdateParameters(Matrix<double> upstreamWeightedErrors)
+        {
+
             WeightedError.Add(-0.1 / BatchSize * Activation * upstreamWeightedErrors.Transpose());
-            Bias.Add(-0.1 / BatchSize * upstreamWeightedErrors.RowSums());
+            Vector<double> res = upstreamWeightedErrors.RowSums();
+            Bias.Add(-0.1 / BatchSize * res.ToColumnMatrix());
         }
     }
 }
