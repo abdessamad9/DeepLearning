@@ -1,4 +1,5 @@
 ﻿using NeuralNetwork.Common.Serialization;
+using NeuralNetwork.Common.Layers;
 using System;
 
 namespace NeuralNetwork.Serialization
@@ -7,7 +8,15 @@ namespace NeuralNetwork.Serialization
     {
         public static Network Deserialize(SerializedNetwork serializedNetwork)
         {
-            throw new NotImplementedException();
+            foreach (ISerializedLayer seLayer in serializedNetwork.SerializedLayers)
+            {
+               /*switch( seLayer)
+                {
+                    case SerializedStandardLayer:
+                        return new Standatlayer
+                }*/
+            }
+            return null;
         }
     }
 }
