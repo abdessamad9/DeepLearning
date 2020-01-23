@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using NeuralNetwork.Common.Activators;
 namespace NeuralNetwork.Activators
 {
     class Identity : IActivator

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
-namespace NeuralNetwork.Common.Activators
+using NeuralNetwork.Common.Activators;
+namespace NeuralNetwork.Activators
 {
     class ReLU : IActivator
     {

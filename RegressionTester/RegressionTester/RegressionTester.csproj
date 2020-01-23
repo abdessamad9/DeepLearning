@@ -12,13 +12,13 @@
 
   <ItemGroup>
     <Reference Include="DataProviders">
-      <HintPath>..\..\NeuralNetworks\DataProviders\obj\Release\netstandard2.0\DataProviders.dll</HintPath>
+      <HintPath>..\..\..\..\..\source\repos\deeplearningpricer\NeuralNetworks\DataProviders\bin\Debug\netstandard2.0\DataProviders.dll</HintPath>
     </Reference>
     <Reference Include="NeuralNetwork">
-      <HintPath>..\..\NeuralNetworks\NeuralNetwork\obj\Release\netstandard2.0\NeuralNetwork.dll</HintPath>
+      <HintPath>..\..\..\..\..\source\repos\deeplearningpricer\NeuralNetworks\NeuralNetwork\bin\Debug\netstandard2.0\NeuralNetwork.dll</HintPath>
     </Reference>
     <Reference Include="NeuralNetwork.Common">
-      <HintPath>..\..\NeuralNetworks\NeuralNetwork.Common\bin\Release\netstandard2.0\NeuralNetwork.Common.dll</HintPath>
+      <HintPath>..\..\..\..\..\source\repos\deeplearningpricer\NeuralNetworks\NeuralNetwork\bin\Debug\netstandard2.0\NeuralNetwork.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -5,6 +5,7 @@ using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using NeuralNetwork.Common.Activators;
 using NeuralNetwork.Common.GradientAdjustmentsParameters;
+using NeuralNetwork.Common.Layers;
 
 namespace NeuralNetwork.Layers
 {
@@ -151,7 +152,7 @@ namespace NeuralNetwork.Layers
 
         public void UpdateParameters(Matrix<double>  upstreamWeightedErrors )
         {
-            switch (gradientAdjustmentParameters.Type)
+            /*switch (gradientAdjustmentParameters.Type)
             {
                 case (int)GradientAdjustmentType.FixedLearningRate:
 
@@ -168,7 +169,7 @@ namespace NeuralNetwork.Layers
 
                 default:
                     throw new InvalidOperationException("Unknown gradient accelerator parameter");
-            }
+            }*/
 
 
             WeightedError.Add(-0.1 / BatchSize * Activation * upstreamWeightedErrors.Transpose());

@@ -4,11 +4,11 @@ using System.Text;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using NeuralNetwork.Common.Activators;
-
+using NeuralNetwork.Common.Layers;
 
 namespace NeuralNetwork.Layers
 {
-    class Dropout:ILayer
+    public class Dropout:ILayer
     {
         public Dropout(int layerSize, int inputSize, int batchSize, IActivator activator, Matrix<double> bias, Matrix<double> activation, Matrix<double> weightedError)
         {

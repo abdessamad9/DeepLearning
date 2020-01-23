@@ -25,7 +25,7 @@ namespace NeuralNetwork.Serialization
         public static ISerializedLayer SerializeLayer(ILayer layer)
         {
             ISerializedLayer seriaLayer;
-            switch (layer.Type)
+            /*switch (layer.Type)
             {
                 case LayerType.Dropout:
                      seriaLayer = new SerializedDropoutLayer();
@@ -49,7 +49,10 @@ namespace NeuralNetwork.Serialization
 
                 default:
                     return null;
-            }
+            }*/
+            seriaLayer = new SerializedStandardLayer();
+            return seriaLayer;
+
         }
 
     }
