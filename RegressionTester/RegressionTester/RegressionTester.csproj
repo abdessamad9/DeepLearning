@@ -10,4 +10,16 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="DataProviders">
+      <HintPath>..\..\NeuralNetworks\DataProviders\obj\Release\netstandard2.0\DataProviders.dll</HintPath>
+    </Reference>
+    <Reference Include="NeuralNetwork">
+      <HintPath>..\..\NeuralNetworks\NeuralNetwork\obj\Release\netstandard2.0\NeuralNetwork.dll</HintPath>
+    </Reference>
+    <Reference Include="NeuralNetwork.Common">
+      <HintPath>..\..\NeuralNetworks\NeuralNetwork.Common\bin\Release\netstandard2.0\NeuralNetwork.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

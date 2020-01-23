@@ -30,6 +30,10 @@ namespace NeuralNetwork
             {
                 return Output;
             }
+             set
+            {
+                this.Output = value;
+            }
         }
 
         public ILayer[] Layers
