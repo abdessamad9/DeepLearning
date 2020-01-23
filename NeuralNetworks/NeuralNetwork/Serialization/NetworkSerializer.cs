@@ -10,23 +10,47 @@ namespace NeuralNetwork.Serialization
 
         public static SerializedNetwork Serialize(INetwork network)
         {
-            foreach( ILayer layer in network.Layers)
+            SerializedNetwork ns = new SerializedNetwork();
+            ns.BatchSize = network.BatchSize;
+            ns.SerializedLayers = new ISerializedLayer[ns.BatchSize];
+            int indice = 0;
+            foreach ( ILayer layer in network.Layers)
             {
-               return SerializeLayer(layer);
+                ns.SerializedLayers[indice] = SerializeLayer(layer);
+                indice++;
             }
-            return null;
+            return ns;
         }
 
-        public static SerializedNetwork SerializeLayer(ILayer layer)
+        public static ISerializedLayer SerializeLayer(ILayer layer)
         {
-           /* switch (layer)
+            ISerializedLayer seriaLayer;
+            switch (layer.Type)
             {
-                case SerializedInputStandardizingLayer:
-                    return ....
-            }*/
-            return null;
-        }
+                case LayerType.Dropout:
+                     seriaLayer = new SerializedDropoutLayer();
+                    return seriaLayer; 
 
+                case LayerType.Standard:
+                    seriaLayer = new SerializedStandardLayer();
+                    return seriaLayer;
+             
+                case LayerType.InputStandardizing:
+                    seriaLayer = new SerializedInputStandardizingLayer();
+                    return seriaLayer;
+
+                case LayerType.L2Penalty:
+                    seriaLayer = new SerializedL2PenaltyLayer();
+                    return seriaLayer;
+
+                case LayerType.WeightDecay:
+                    seriaLayer = new SerializedWeightDecayLayer();
+                    return seriaLayer;
+
+                default:
+                    return null;
+            }
+        }
 
     }
 }

@@ -106,6 +106,14 @@ namespace NeuralNetwork.Common.Layers
             }
         }
 
+        public LayerType Type
+        {
+            get
+            {
+                return LayerType.Dropout;
+            }
+
+        }
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
             Matrix<double> zeta = WeightedError.Transpose() * Activation + Bias;

@@ -104,6 +104,13 @@ namespace NeuralNetwork.Common.Layers
                 this.WeightedError = value;
             }
         }
+        public LayerType Type {
+            get
+            {
+                return LayerType.InputStandardizing;
+            }
+                
+        }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
