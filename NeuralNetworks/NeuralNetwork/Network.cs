@@ -35,6 +35,10 @@ namespace NeuralNetwork
             {
                 return Layers;
             }
+            set
+            {
+                this.Layers = value;
+            }
         }
 
         public Mode Mode

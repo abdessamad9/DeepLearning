@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NeuralNetwork.Common.Layers
 {
-    class WeightDecay
+    public class WeightDecay
     {
     }
 }

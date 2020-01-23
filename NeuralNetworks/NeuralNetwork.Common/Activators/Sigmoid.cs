@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NeuralNetwork.Common.Activators
 {
-    class Sigmoid : IActivator
+    public class Sigmoid : IActivator
     {
         public Sigmoid()
         {

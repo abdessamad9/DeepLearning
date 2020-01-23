@@ -20,6 +20,7 @@ namespace NeuralNetwork.Common.Serialization
         }
 
         public ISerializedLayer UnderlyingSerializedLayer { get; set; }
+        public int LayerSize { get; set; }
         public double[] Mean { get; set; }
         public double[] StdDev { get; set; }
         public LayerType Type => LayerType.InputStandardizing;

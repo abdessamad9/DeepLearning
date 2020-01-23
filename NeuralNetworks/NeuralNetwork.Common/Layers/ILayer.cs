@@ -65,5 +65,9 @@ namespace NeuralNetwork.Common.Layers
         /// The weighted error.
         /// </value>
         Matrix<double> WeightedError { get; }
+
+
+        //GGets Type of layer
+        LayerType Type { get; }
     }
 }

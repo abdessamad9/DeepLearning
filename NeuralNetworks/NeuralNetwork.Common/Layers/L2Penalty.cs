@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NeuralNetwork.Common.Layers
 {
-    class L2Penalty
+    public class L2Penalty
     {
 
     }

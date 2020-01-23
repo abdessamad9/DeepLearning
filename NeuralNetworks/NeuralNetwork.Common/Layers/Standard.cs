@@ -6,7 +6,7 @@ using MathNet.Numerics.LinearAlgebra.Double;
 using NeuralNetwork.Common.Activators;
 namespace NeuralNetwork.Common.Layers
 {
-    class Standard:ILayer
+    public class Standard:ILayer
     {
         public Standard(int layerSize, int inputSize, int batchSize, IActivator activator, Matrix<double> bias, Matrix<double> activation, Matrix<double> weightedError)
         {

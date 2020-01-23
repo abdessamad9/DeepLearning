@@ -8,7 +8,7 @@ using NeuralNetwork.Common.Activators;
 
 namespace NeuralNetwork.Common.Layers
 {
-    class Dropout:ILayer
+    public class Dropout:ILayer
     {
         public Dropout(int layerSize, int inputSize, int batchSize, IActivator activator, Matrix<double> bias, Matrix<double> activation, Matrix<double> weightedError)
         {

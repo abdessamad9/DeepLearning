@@ -7,7 +7,7 @@ using NeuralNetwork.Common.Activators;
 
 namespace NeuralNetwork.Common.Layers
 {
-    class InputStandardizing : ILayer
+    public class InputStandardizing : ILayer
     {
         public InputStandardizing(int layerSize, int inputSize, int batchSize, IActivator activator, Matrix<double> bias, Matrix<double> activation, Matrix<double> weightedError)
         {

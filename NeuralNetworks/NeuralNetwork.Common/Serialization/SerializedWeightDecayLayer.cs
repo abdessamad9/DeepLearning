@@ -18,6 +18,7 @@ namespace NeuralNetwork.Common.Serialization
            
         }
 
+        public int LayerSize { get; set; }
 
         public LayerType Type => LayerType.WeightDecay;
 
