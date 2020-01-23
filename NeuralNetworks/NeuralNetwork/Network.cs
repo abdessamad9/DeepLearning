@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using NeuralNetwork.Common;
 using NeuralNetwork.Common.Layers;
+
 using System;
 
 namespace NeuralNetwork
@@ -21,11 +22,17 @@ namespace NeuralNetwork
 
         }
 
+     
+
         public Matrix<double> Output
         {
             get
             {
                 return Output;
+            }
+             set
+            {
+                this.Output = value;
             }
         }
 
@@ -81,10 +88,12 @@ namespace NeuralNetwork
 
         public void Propagate(Matrix<double> input)
         {
-            for (int i = 0; i < Layers.Length; i++)
+            Layers[0].Propagate(input);
+            for (int i = 1; i < Layers.Length; i++)
             {
-                Layers[i].Propagate(input);
+                Layers[i].Propagate(Layers[i-1].Activation);
             }
+            Output = Layers[Layers.Length - 1].Activation;
         }
     }
 }
