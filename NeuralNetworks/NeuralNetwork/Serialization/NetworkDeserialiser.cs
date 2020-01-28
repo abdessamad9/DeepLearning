@@ -13,39 +13,33 @@ namespace NeuralNetwork.Serialization
     {
         public static Network Deserialize(SerializedNetwork serializedNetwork)
         {
-            Network network = new Network();
-            network.BatchSize = serializedNetwork.BatchSize;
-            network.Layers = new ILayer[network.BatchSize];
-            int indice = 0;
-            foreach (ISerializedLayer seLayer in serializedNetwork.SerializedLayers)
+            Network network = new Network( serializedNetwork.BatchSize, serializedNetwork.SerializedLayers.Length );
+
+            
+            // Console.WriteLine("serializedNetwork.BatchSize" +serializedNetwork.BatchSize);
+            for (int i = 0 ; i < serializedNetwork.SerializedLayers.Length; i++)
             {
-                network.Layers[indice] = DeserializeLayer(seLayer, network.BatchSize);
+                network.Layers[i] = DeserializeLayer(serializedNetwork.SerializedLayers[i], network.BatchSize);
+                
             }
+            network.Output = Matrix<double>.Build.Dense(network.Layers[network.Layers.Length -1].Activation.RowCount , network.Layers[network.Layers.Length -1].Activation.ColumnCount);
+
+   
             return network;
         }
 
 
         public static ILayer DeserializeLayer(ISerializedLayer seLayer, int batchSize)
         {
-
-            Matrix<double> biais;
-            Matrix<double> weigths;
-            //Matrix<double> activation = Matrix<double>.Build.Dense(batchSize, batchSize);
-            //La matrice activation
-            Matrix<double> weightedError = Matrix<double>.Build.Dense(batchSize, batchSize);
             IActivator activator;
-            int input = 0;
-
             ILayer layer;
             switch (seLayer.Type)
             {
                 case LayerType.Standard:
                     SerializedStandardLayer standard = (SerializedStandardLayer)seLayer;
+               
                     activator = ActivatorNew(standard.ActivatorType);
-                    activator = ActivatorNew(standard.ActivatorType);
-                    biais = new DenseMatrix(standard.Bias.Length, standard.Bias.Length, standard.Bias);
-                    weigths = DenseMatrix.OfArray(standard.Weights);
-                    layer = new Standard(0, input, batchSize, activator, biais, weigths, weightedError);
+                    layer = new Standard(batchSize, activator, standard.Bias, standard.Weights, standard.GradientAdjustmentParameters);
 
                     return layer;
                 /** case LayerType.Dropout:

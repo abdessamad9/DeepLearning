@@ -4,6 +4,7 @@ using LiveCharts.Wpf;
 using NeuralNetwork.Common;
 using NeuralNetwork.Common.Serialization;
 using NeuralNetwork.Serialization;
+using NeuralNetwork;
 using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -154,7 +155,7 @@ namespace Visualizer
                 if (result == DialogResult.OK)
                 {
                     InitialSerializedNetwork = JsonConvert.DeserializeObject<SerializedNetwork>(File.ReadAllText(dialog.FileName));
-                    CurrentNetwork = NetworkDeserializer.Deserialize(InitialSerializedNetwork);
+                     CurrentNetwork = NetworkDeserializer.Deserialize(InitialSerializedNetwork);
                 }
             }
         }

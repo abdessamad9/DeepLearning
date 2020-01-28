@@ -4,146 +4,224 @@ using System.Text;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using NeuralNetwork.Common.Activators;
+using NeuralNetwork.Common.GradientAdjustmentParameters;
+using NeuralNetwork.Common.GradientAdjustmentsParameters;
 using NeuralNetwork.Common.Layers;
 
 namespace NeuralNetwork.Layers
 {
-    class Standard:ILayer
+    class Standard : ILayer
     {
-        public Standard(int layerSize, int inputSize, int batchSize, IActivator activator, Matrix<double> bias, Matrix<double> activation, Matrix<double> weightedError)
+        //
+        public Standard( int batchSize, IActivator activator, double[] bias, double[,] weights, IGradientAdjustmentParameters gradientAdjustmentParameters)
         {
-            LayerSize = layerSize;
-            InputSize = inputSize;
+
             BatchSize = batchSize;
-            Activator = activator;
-            Bias = bias;
-            Activation = activation;
-            WeightedError = weightedError;
+            LayerSize = bias.Length;
+            InputSize = weights.GetLength(0);
+            Activator =activator;
+            Bias = Matrix<double>.Build.Dense(bias.Length, BatchSize,0);
+            for(int i= 0; i < BatchSize; i++)
+            {
+                Bias.SetColumn(i, bias);
+            }
+            B = Matrix<double>.Build.Dense(LayerSize, BatchSize,0);
+            Weights = DenseMatrix.OfArray(weights);
+            WeightedError = Matrix<double>.Build.Dense(Weights.RowCount,B.ColumnCount,0);
+            Activation = Matrix<double>.Build.Dense(LayerSize, BatchSize,0);
+            GradientAdjustmentParameters = gradientAdjustmentParameters;
         }
 
+        Matrix<double> lastActivation;
+        public Matrix<double> LastActivation
+        {
+            get
+            {
+                return lastActivation;
+            }
+            set
+            {
+                lastActivation = value;
+            }
+        }
+        Matrix<double> b;
+        public Matrix<double> B
+        {
+            get
+            {
+                return b;
+            }
+            set
+            {
+                b = value;
+            }
+        }
+        Matrix<double> weights;
+        public Matrix<double> Weights
+        {
+            get
+            {
+                return weights;
+            }
+            set
+            {
+                weights = value;
+            }
+        }
+        IGradientAdjustmentParameters gradientAdjustmentParameters;
+        public IGradientAdjustmentParameters GradientAdjustmentParameters
+        {
+            get
+            {
+                return gradientAdjustmentParameters;
+            }
+            set
+            {
+                this.gradientAdjustmentParameters =  value;
+            }
+        }
 
+        int layerSize;
         public int LayerSize
         {
             get
             {
-                return LayerSize;
+                return layerSize;
             }
             set
             {
-                this.LayerSize = value;
+                this.layerSize = value;
             }
         }
+        int inputSize;
         public int InputSize
         {
             get
             {
-                return InputSize;
+                return inputSize;
             }
             set
             {
-                this.InputSize = value;
+                this.inputSize = value;
             }
         }
-
+        IActivator activator;
         public IActivator Activator
         {
             get
             {
-                return Activator;
+                return activator;
             }
             set
             {
-                this.Activator = value;
+                this.activator = value;
             }
         }
 
+        Matrix<double> bias;
         public Matrix<double> Bias
         {
             get
             {
-                return Bias;
+                return bias;
             }
             set
             {
-                this.Bias = value;
+                this.bias = value;
             }
         }
 
-
+        int batchSize;
         public int BatchSize
         {
             get
             {
-                return BatchSize;
+                return batchSize;
             }
             set
             {
-                this.BatchSize = value;
+                this.batchSize = value;
             }
         }
 
+        Matrix<double> activation;
         public Matrix<double> Activation
         {
             get
             {
-                return Activation;
+                return activation;
             }
             set
             {
-                this.Activation = value;
+                this.activation = value;
             }
         }
 
+        Matrix<double> weightedError;
         public Matrix<double> WeightedError
         {
             get
             {
-                return WeightedError;
+                return weightedError;
             }
             set
             {
-                this.WeightedError = value;
+                this.weightedError = value;
             }
         }
-        public void BackPropagate(Matrix<double> upstreamWeightedErrors)
-        {
-            Matrix<double> zeta = WeightedError.Transpose() * Activation + Bias;
-            zeta.Map(Activator.ApplyDerivative);
-
-            upstreamWeightedErrors.Multiply(WeightedError);
-            upstreamWeightedErrors.PointwiseMultiply(zeta);
-            UpdateParameters(upstreamWeightedErrors);
-
-
-        }
-
+        
         public bool Equals(ILayer other)
         {
-            return WeightedError == other.WeightedError && Activation == other.Activation && LayerSize == other.LayerSize && InputSize == other.InputSize && BatchSize == other.BatchSize;
+            return  LayerSize == other.LayerSize && InputSize == other.InputSize && BatchSize == other.BatchSize;
         }
 
         public void Propagate(Matrix<double> input)
         {
-            System.Diagnostics.Debug.Assert(input.RowCount == 1 && input.ColumnCount == LayerSize, "Dimensions incompatibles");
-            Activation = WeightedError.Transpose() * input + Bias;
+            LastActivation = input;
+            Activation = weights.Transpose() * input + Bias;
             Activation.Map(Activator.Apply);
         }
 
         public void UpdateParameters()
         {
-            /* Matrix<double> upstreamWeightedErrors = null;
+            //Vector<double> res;
+            switch (GradientAdjustmentParameters.Type)
+            {
+                case GradientAdjustmentType.FixedLearningRate:
+                    var gradW = -((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate / BatchSize * LastActivation * B.Transpose();
+                    var gradB = -((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate / BatchSize * B * Vector<double>.Build.Dense(BatchSize, 1);
+                    Weights.Add(gradW);
+                    for(int i= 0; i < BatchSize; i++)
+                    {
+                        Bias.SetColumn(i,  Bias.Column(i) + gradB);
+                    }
+                    break;
 
+                case GradientAdjustmentType.Adam:
+                    throw new NotImplementedException();
+                    break;
 
-             WeightedError.Add(-0.1 / BatchSize * Activation * upstreamWeightedErrors.Transpose());
-             Bias.Add(-0.1 / BatchSize * upstreamWeightedErrors.RowSums());*/
+                case GradientAdjustmentType.Momentum:
+                    /*WeightedError.Multiply(-((MomentumParameters)(GradientAdjustmentParameters)).Momentum);
+                    WeightedError.Add(-((MomentumParameters)(GradientAdjustmentParameters)).LearningRate  * Activation * upstreamWeightedErrors.Transpose());
+                     res = upstreamWeightedErrors.RowSums();
+                    Bias.Multiply(-((MomentumParameters)(GradientAdjustmentParameters)).Momentum);
+                    Bias.Add(-((MomentumParameters)(GradientAdjustmentParameters)).LearningRate  * res.ToColumnMatrix());*/
+                    break;
+
+                default:
+                    throw new InvalidOperationException("Unknown gradient accelerator parameter");
+            }
         }
-
-        public void UpdateParameters(Matrix<double> upstreamWeightedErrors)
+        public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
+            Matrix<double> zeta = Activation;
+            zeta.Map(Activator.ApplyDerivative);
+            B = zeta.PointwiseMultiply(upstreamWeightedErrors);
+            WeightedError = Weights * B;
 
-            WeightedError.Add(-0.1 / BatchSize * Activation * upstreamWeightedErrors.Transpose());
-            Vector<double> res = upstreamWeightedErrors.RowSums();
-            Bias.Add(-0.1 / BatchSize * res.ToColumnMatrix());
         }
+
+       
     }
 }

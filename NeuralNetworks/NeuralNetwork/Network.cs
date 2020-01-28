@@ -9,54 +9,67 @@ namespace NeuralNetwork
     public sealed class Network : IEquatable<Network>, INetwork
     {
 
+
+        public int batchSize;
+        
         public int BatchSize
         {
             get
             {
-                return BatchSize;
+                return batchSize;
             }
             set
             {
-                this.BatchSize = value;
+                this.batchSize = value;
             }
 
         }
 
-     
+        public Network (int batchsize, int numberLayer){
+           BatchSize = batchsize;
+           this.Layers = new ILayer[numberLayer];
 
+
+
+        }
+
+
+        Matrix<double> output;
         public Matrix<double> Output
         {
             get
             {
-                return Output;
+                return output;
             }
              set
             {
-                this.Output = value;
+                this.output = value;
             }
         }
 
+        ILayer[] layers;
         public ILayer[] Layers
         {
             get
             {
-                return Layers;
+                return layers;
             }
             set
             {
-                this.Layers = value;
+                this.layers = value;
             }
         }
 
+        Mode mode;
         public Mode Mode
         {
             get
             {
-                return Mode;
+                return mode;
             }
             set
             {
-                this.Mode = value;
+                this.mode = value;
             }
         }
 
@@ -80,9 +93,12 @@ namespace NeuralNetwork
 
         public void Learn(Matrix<double> outputLayerError)
         {
+            var Input = outputLayerError;
             for (int i = Layers.Length - 1; i >= 0; i--)
             {
-                Layers[i].BackPropagate(outputLayerError);
+                Layers[i].BackPropagate(Input);
+                Layers[i].UpdateParameters();
+                Input = Layers[i].WeightedError; // W*B
             }
         }
 

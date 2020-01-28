@@ -11,14 +11,15 @@ namespace NeuralNetwork.Serialization
         public static SerializedNetwork Serialize(INetwork network)
         {
             SerializedNetwork ns = new SerializedNetwork();
-            ns.BatchSize = network.BatchSize;
-            ns.SerializedLayers = new ISerializedLayer[ns.BatchSize];
-            int indice = 0;
-            foreach ( ILayer layer in network.Layers)
+           ns.BatchSize =4;// network.BatchSize;
+           ns.SerializedLayers = new ISerializedLayer[network.Layers.Length];
+         
+            for (int i = 0; i < network.Layers.Length; i++)
             {
-                ns.SerializedLayers[indice] = SerializeLayer(layer);
-                indice++;
+                ns.SerializedLayers[i] = SerializeLayer(network.Layers[i]);
             }
+
+          
             return ns;
         }
 

@@ -4,13 +4,14 @@ using System.Text;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using NeuralNetwork.Common.Activators;
+using NeuralNetwork.Common.GradientAdjustmentsParameters;
 using NeuralNetwork.Common.Layers;
 
 namespace NeuralNetwork.Layers
 {
     public class Dropout:ILayer
     {
-        public Dropout(int layerSize, int inputSize, int batchSize, IActivator activator, Matrix<double> bias, Matrix<double> activation, Matrix<double> weightedError)
+        public Dropout(int layerSize, int inputSize, int batchSize, IActivator activator, Matrix<double> bias, Matrix<double> activation, Matrix<double> weightedError, IGradientAdjustmentParameters gradientAdjustmentParameters, double keepProbability)
         {
             LayerSize = layerSize;
             InputSize = inputSize;
@@ -19,9 +20,34 @@ namespace NeuralNetwork.Layers
             Bias = bias;
             Activation = activation;
             WeightedError = weightedError;
+            GradientAdjustmentParameters = gradientAdjustmentParameters;
+            KeepProbability = keepProbability;
         }
 
-        
+        public double KeepProbability
+        {
+            get
+            {
+                return KeepProbability;
+            }
+            set
+            {
+                KeepProbability = value;
+            }
+        }
+
+        public IGradientAdjustmentParameters GradientAdjustmentParameters
+        {
+            get
+            {
+                return GradientAdjustmentParameters;
+            }
+            set
+            {
+                GradientAdjustmentParameters = value;
+            }
+        }
+
         public int LayerSize
         {
             get
@@ -106,15 +132,6 @@ namespace NeuralNetwork.Layers
             }
         }
 
-        public void BackPropagate(Matrix<double> upstreamWeightedErrors)
-        {
-            Matrix<double> zeta = WeightedError.Transpose() * Activation + Bias;
-            zeta.Map(Activator.ApplyDerivative);
-            upstreamWeightedErrors.PointwiseMultiply(zeta);
-            UpdateParameters(upstreamWeightedErrors);
-
-        }
-
         public bool Equals(ILayer other)
         {
             return WeightedError == other.WeightedError && Activation == other.Activation && LayerSize == other.LayerSize && InputSize == other.InputSize && BatchSize == other.BatchSize;
@@ -122,26 +139,49 @@ namespace NeuralNetwork.Layers
 
         public void Propagate(Matrix<double> input)
         {
-            System.Diagnostics.Debug.Assert(input.RowCount == 1 && input.ColumnCount == LayerSize, "Dimensions incompatibles");
+            throw new NotImplementedException();
+            /*System.Diagnostics.Debug.Assert(input.RowCount == 1 && input.ColumnCount == LayerSize, "Dimensions incompatibles");
             Activation = WeightedError.Transpose() * input + Bias;
-            Activation.Map(Activator.Apply);
+            Activation.Map(Activator.Apply);*/
         }
 
         public void UpdateParameters()
         {
-            /* Matrix<double> upstreamWeightedErrors = null;
-
-
-             WeightedError.Add(-0.1 / BatchSize * Activation * upstreamWeightedErrors.Transpose());
-             Bias.Add(-0.1 / BatchSize * upstreamWeightedErrors.RowSums());*/
         }
-
-        public void UpdateParameters(Matrix<double> upstreamWeightedErrors)
+        public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
+            /*Matrix<double> zeta = WeightedError.Transpose() * Activation + Bias;
+            zeta.Map(Activator.ApplyDerivative);
+            Vector<double> res;
+            upstreamWeightedErrors.Multiply(WeightedError);
+            upstreamWeightedErrors.PointwiseMultiply(zeta);
+            switch (GradientAdjustmentParameters.Type)
+            {
+                case GradientAdjustmentType.FixedLearningRate:
+                    WeightedError.Multiply(1 - ((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * PenaltyCoefficient);
+                    WeightedError.Add(-((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * Activation * upstreamWeightedErrors.Transpose());
+                    res = upstreamWeightedErrors.RowSums();
+                    Bias.Add(-((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * res.ToColumnMatrix());
+                    break;
 
-            WeightedError.Add(-0.1 / BatchSize * Activation * upstreamWeightedErrors.Transpose());
-            Vector<double> res = upstreamWeightedErrors.RowSums();
-            Bias.Add(-0.1 / BatchSize * res.ToColumnMatrix());
+                case GradientAdjustmentType.Adam:
+                    throw new NotImplementedException();
+                    break;
+
+                case GradientAdjustmentType.Momentum:
+                    WeightedError.Multiply(1 - ((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * PenaltyCoefficient);
+                    WeightedError.Multiply(-((MomentumParameters)(GradientAdjustmentParameters)).Momentum);
+                    WeightedError.Add(-((MomentumParameters)(GradientAdjustmentParameters)).LearningRate * Activation * upstreamWeightedErrors.Transpose());
+                    res = upstreamWeightedErrors.RowSums();
+                    Bias.Multiply(-((MomentumParameters)(GradientAdjustmentParameters)).Momentum);
+                    Bias.Add(-((MomentumParameters)(GradientAdjustmentParameters)).LearningRate * res.ToColumnMatrix());
+                    break;
+
+                default:
+                    throw new InvalidOperationException("Unknown gradient accelerator parameter");
+            }*/
+            throw new NotImplementedException();
+
         }
     }
 }
