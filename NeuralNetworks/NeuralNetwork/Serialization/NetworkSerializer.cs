@@ -1,6 +1,9 @@
 ﻿using NeuralNetwork.Common;
 using NeuralNetwork.Common.Serialization;
 using NeuralNetwork.Common.Layers;
+using NeuralNetwork.Layers;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 using System;
 
 namespace NeuralNetwork.Serialization
@@ -10,17 +13,17 @@ namespace NeuralNetwork.Serialization
 
         public static SerializedNetwork Serialize(INetwork network)
         {
-            SerializedNetwork ns = new SerializedNetwork();
-           ns.BatchSize =4;// network.BatchSize;
-           ns.SerializedLayers = new ISerializedLayer[network.Layers.Length];
+            SerializedNetwork serializedNetwork = new SerializedNetwork();
+            serializedNetwork.BatchSize = network.BatchSize;
+            serializedNetwork.SerializedLayers = new ISerializedLayer[network.Layers.Length];
          
             for (int i = 0; i < network.Layers.Length; i++)
             {
-                ns.SerializedLayers[i] = SerializeLayer(network.Layers[i]);
+                serializedNetwork.SerializedLayers[i] = SerializeLayer(network.Layers[i]);
             }
 
           
-            return ns;
+            return serializedNetwork;
         }
 
         public static ISerializedLayer SerializeLayer(ILayer layer)
@@ -51,10 +54,12 @@ namespace NeuralNetwork.Serialization
                 default:
                     return null;
             }*/
-            seriaLayer = new SerializedStandardLayer();
+            Standard layerStandard = (Standard)layer;
+            seriaLayer = new SerializedStandardLayer(layerStandard.Bias.Column(0).ToArray(), layerStandard.Weights.ToArray(),layerStandard.Activator.Type, layerStandard.GradientAdjustmentParameters);
             return seriaLayer;
 
         }
 
     }
+
 }
