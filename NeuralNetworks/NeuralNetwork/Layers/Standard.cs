@@ -143,7 +143,18 @@ namespace NeuralNetwork.Layers
                 this.batchSize = value;
             }
         }
-
+        Matrix<double> zeta;
+        public Matrix<double> Zeta
+        {
+            get
+            {
+                return zeta;
+            }
+            set
+            {
+                this.zeta = value;
+            }
+        }
         Matrix<double> activation;
         public Matrix<double> Activation
         {
@@ -178,8 +189,8 @@ namespace NeuralNetwork.Layers
         public void Propagate(Matrix<double> input)
         {
             LastActivation = input;
-            Activation = weights.Transpose() * input + Bias;
-            Activation.Map(Activator.Apply);
+            Zeta = weights.Transpose() * input + Bias;
+            Zeta.Map(Activator.Apply, Activation);
         }
 
         public void UpdateParameters()
@@ -215,9 +226,9 @@ namespace NeuralNetwork.Layers
         }
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
-            Matrix<double> zeta = Activation;
-            zeta.Map(Activator.ApplyDerivative);
-            B = zeta.PointwiseMultiply(upstreamWeightedErrors);
+            Matrix<double> ZetaPrime = Matrix<double>.Build.Dense(LayerSize,BatchSize,0);
+            zeta.Map(Activator.ApplyDerivative,ZetaPrime);
+            B = ZetaPrime.PointwiseMultiply(upstreamWeightedErrors);
             WeightedError = Weights * B;
 
         }

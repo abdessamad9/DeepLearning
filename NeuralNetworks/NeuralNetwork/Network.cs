@@ -104,12 +104,13 @@ namespace NeuralNetwork
 
         public void Propagate(Matrix<double> input)
         {
-            Layers[0].Propagate(input);
-            for (int i = 1; i < Layers.Length; i++)
+            var InputPrime = input;
+            for (int i = 0; i < Layers.Length; i++)
             {
-                Layers[i].Propagate(Layers[i-1].Activation);
+                Layers[i].Propagate(InputPrime);
+                InputPrime = Layers[i].Activation;
             }
-            Output = Layers[Layers.Length - 1].Activation;
+            Output = InputPrime;
         }
     }
 }
