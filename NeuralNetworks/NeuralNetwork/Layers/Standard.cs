@@ -10,7 +10,7 @@ using NeuralNetwork.Common.Layers;
 
 namespace NeuralNetwork.Layers
 {
-    class Standard : ILayer
+    public class Standard : ILayer
     {
         //
         public Standard( int batchSize, IActivator activator, double[] bias, double[,] weights, IGradientAdjustmentParameters gradientAdjustmentParameters)

@@ -4,7 +4,7 @@ using System.Text;
 using NeuralNetwork.Common.Activators;
 namespace NeuralNetwork.Activators
 {
-    class LeakyReLU : IActivator
+    public class LeakyReLU : IActivator
     {
         double alpha;
         public LeakyReLU()
@@ -18,3 +18,4 @@ namespace NeuralNetwork.Activators
     }
 
 }
+

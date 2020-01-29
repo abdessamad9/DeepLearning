@@ -4,7 +4,7 @@ using System.Text;
 using NeuralNetwork.Common.Activators;
 namespace NeuralNetwork.Activators
 {
-    class ReLU : IActivator
+    public class ReLU : IActivator
     {
         public ReLU()
         {

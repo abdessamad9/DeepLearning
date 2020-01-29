@@ -9,7 +9,7 @@ using NeuralNetwork.Common.Layers;
 
 namespace NeuralNetwork.Layers
 {
-    class InputStandardizing 
+    public class InputStandardizing 
     {
        
     }

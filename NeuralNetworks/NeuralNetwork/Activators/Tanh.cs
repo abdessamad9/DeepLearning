@@ -4,7 +4,7 @@ using System.Text;
 using NeuralNetwork.Common.Activators;
 namespace NeuralNetwork.Activators
 {
-    class Tanh : IActivator
+    public class Tanh : IActivator
     {
         public Tanh()
         {
