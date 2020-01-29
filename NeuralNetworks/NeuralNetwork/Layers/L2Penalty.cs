@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 using NeuralNetwork.Common.Activators;
 using NeuralNetwork.Common.GradientAdjustmentParameters;
 using NeuralNetwork.Common.GradientAdjustmentsParameters;
@@ -10,176 +11,446 @@ namespace NeuralNetwork.Layers
 {
     class L2Penalty : ILayer
     {
-        public L2Penalty(int layerSize, int inputSize, int batchSize, IActivator activator, Matrix<double> bias, Matrix<double> activation, Matrix<double> weightedError, IGradientAdjustmentParameters gradientAdjustmentParameters, double penaltyCoefficient)
+        //
+        public L2Penalty(int batchSize, IActivator activator, double[] bias, double[,] weights, IGradientAdjustmentParameters gradientAdjustmentParameters, double indiceLayer, double penaltyCoefficient)
         {
-            LayerSize = layerSize;
-            InputSize = inputSize;
+
             BatchSize = batchSize;
+            LayerSize = bias.Length;
+            InputSize = weights.GetLength(0);
             Activator = activator;
-            Bias = bias;
-            Activation = activation;
-            WeightedError = weightedError;
+            Bias = Matrix<double>.Build.Dense(bias.Length, BatchSize, 0);
+            for (int i = 0; i < BatchSize; i++)
+            {
+                Bias.SetColumn(i, bias);
+            }
+            B = Matrix<double>.Build.Dense(LayerSize, BatchSize, 0);
+            Weights = DenseMatrix.OfArray(weights);
+            WeightedError = Matrix<double>.Build.Dense(Weights.RowCount, B.ColumnCount, 0);
+            Activation = Matrix<double>.Build.Dense(LayerSize, BatchSize, 0);
             GradientAdjustmentParameters = gradientAdjustmentParameters;
+            VelocityWeights = Matrix<double>.Build.Dense(Weights.RowCount, Weights.ColumnCount, 0);
+            VelocityBias = Matrix<double>.Build.Dense(Bias.RowCount, Bias.ColumnCount, 0);
+
+            SWeights = Matrix<double>.Build.Dense(Weights.RowCount, Weights.ColumnCount, 0);
+            SBias = Matrix<double>.Build.Dense(Bias.RowCount, Bias.ColumnCount, 0);
+            RWeights = Matrix<double>.Build.Dense(Weights.RowCount, Weights.ColumnCount, 0);
+            RBias = Matrix<double>.Build.Dense(Bias.RowCount, Bias.ColumnCount, 0);
+            SPWeights = Matrix<double>.Build.Dense(Weights.RowCount, Weights.ColumnCount, 0);
+            SPBias = Matrix<double>.Build.Dense(Bias.RowCount, Bias.ColumnCount, 0);
+            RPWeights = Matrix<double>.Build.Dense(Weights.RowCount, Weights.ColumnCount, 0);
+            RPBias = Matrix<double>.Build.Dense(Bias.RowCount, Bias.ColumnCount, 0);
+
+            IndiceLayer = indiceLayer;
+
             PenaltyCoefficient = penaltyCoefficient;
         }
 
+        double penaltyCoefficient;
         public double PenaltyCoefficient
         {
             get
             {
-                return PenaltyCoefficient;
+                return penaltyCoefficient;
             }
             set
             {
-                PenaltyCoefficient = value;
+                this.penaltyCoefficient = value;
+            }
+        }
+        double indiceLayer;
+        public double IndiceLayer
+        {
+            get
+            {
+                return indiceLayer;
+            }
+            set
+            {
+                this.indiceLayer = value;
+            }
+        }
+        Matrix<double> rPBias;
+        public Matrix<double> RPBias
+        {
+            get
+            {
+                return rPBias;
+
+            }
+            set
+            {
+                this.rPBias = value;
+            }
+        }
+        Matrix<double> rBias;
+        public Matrix<double> RBias
+        {
+            get
+            {
+                return rBias;
+
+            }
+            set
+            {
+                this.rBias = value;
             }
         }
 
+        Matrix<double> sPBias;
+        public Matrix<double> SPBias
+        {
+            get
+            {
+                return sPBias;
+
+            }
+            set
+            {
+                this.sPBias = value;
+            }
+        }
+        Matrix<double> sBias;
+        public Matrix<double> SBias
+        {
+            get
+            {
+                return sBias;
+
+            }
+            set
+            {
+                this.sBias = value;
+            }
+        }
+
+
+
+        Matrix<double> rPWeights;
+        public Matrix<double> RPWeights
+        {
+            get
+            {
+                return rPWeights;
+
+            }
+            set
+            {
+                this.rPWeights = value;
+            }
+        }
+        Matrix<double> rWeights;
+        public Matrix<double> RWeights
+        {
+            get
+            {
+                return rWeights;
+
+            }
+            set
+            {
+                this.rWeights = value;
+            }
+        }
+
+        Matrix<double> sPWeights;
+        public Matrix<double> SPWeights
+        {
+            get
+            {
+                return sPWeights;
+
+            }
+            set
+            {
+                this.sPWeights = value;
+            }
+        }
+        Matrix<double> sWeights;
+        public Matrix<double> SWeights
+        {
+            get
+            {
+                return sWeights;
+
+            }
+            set
+            {
+                this.sWeights = value;
+            }
+        }
+
+        Matrix<double> velocityWeights;
+        public Matrix<double> VelocityWeights
+        {
+            get
+            {
+                return velocityWeights;
+
+            }
+            set
+            {
+                this.velocityWeights = value;
+            }
+        }
+
+        Matrix<double> velocityBias;
+        public Matrix<double> VelocityBias
+        {
+            get
+            {
+                return velocityBias;
+
+            }
+            set
+            {
+                this.velocityBias = value;
+            }
+        }
+
+        Matrix<double> lastActivation;
+        public Matrix<double> LastActivation
+        {
+            get
+            {
+                return lastActivation;
+            }
+            set
+            {
+                lastActivation = value;
+            }
+        }
+        Matrix<double> b;
+        public Matrix<double> B
+        {
+            get
+            {
+                return b;
+            }
+            set
+            {
+                b = value;
+            }
+        }
+        Matrix<double> weights;
+        public Matrix<double> Weights
+        {
+            get
+            {
+                return weights;
+            }
+            set
+            {
+                weights = value;
+            }
+        }
+        IGradientAdjustmentParameters gradientAdjustmentParameters;
         public IGradientAdjustmentParameters GradientAdjustmentParameters
         {
             get
             {
-                return GradientAdjustmentParameters;
+                return gradientAdjustmentParameters;
             }
             set
             {
-                GradientAdjustmentParameters = value;
+                this.gradientAdjustmentParameters = value;
             }
         }
 
+        int layerSize;
         public int LayerSize
         {
             get
             {
-                return LayerSize;
+                return layerSize;
             }
             set
             {
-                this.LayerSize = value;
+                this.layerSize = value;
             }
         }
+        int inputSize;
         public int InputSize
         {
             get
             {
-                return InputSize;
+                return inputSize;
             }
             set
             {
-                this.InputSize = value;
+                this.inputSize = value;
             }
         }
-
+        IActivator activator;
         public IActivator Activator
         {
             get
             {
-                return Activator;
+                return activator;
             }
             set
             {
-                this.Activator = value;
+                this.activator = value;
             }
         }
 
+        Matrix<double> bias;
         public Matrix<double> Bias
         {
             get
             {
-                return Bias;
+                return bias;
             }
             set
             {
-                this.Bias = value;
+                this.bias = value;
             }
         }
 
-
+        int batchSize;
         public int BatchSize
         {
             get
             {
-                return BatchSize;
+                return batchSize;
             }
             set
             {
-                this.BatchSize = value;
+                this.batchSize = value;
             }
         }
-
+        Matrix<double> zeta;
+        public Matrix<double> Zeta
+        {
+            get
+            {
+                return zeta;
+            }
+            set
+            {
+                this.zeta = value;
+            }
+        }
+        Matrix<double> activation;
         public Matrix<double> Activation
         {
             get
             {
-                return Activation;
+                return activation;
             }
             set
             {
-                this.Activation = value;
+                this.activation = value;
             }
         }
 
+        Matrix<double> weightedError;
         public Matrix<double> WeightedError
         {
             get
             {
-                return WeightedError;
+                return weightedError;
             }
             set
             {
-                this.WeightedError = value;
+                this.weightedError = value;
             }
         }
 
         public bool Equals(ILayer other)
         {
-            return WeightedError == other.WeightedError && Activation == other.Activation && LayerSize == other.LayerSize && InputSize == other.InputSize && BatchSize == other.BatchSize;
+            return LayerSize == other.LayerSize && InputSize == other.InputSize && BatchSize == other.BatchSize;
         }
 
         public void Propagate(Matrix<double> input)
         {
-            System.Diagnostics.Debug.Assert(input.RowCount == 1 && input.ColumnCount == LayerSize, "Dimensions incompatibles");
-            Activation = WeightedError.Transpose() * input + Bias;
-            Activation.Map(Activator.Apply);
+            LastActivation = input;
+            Zeta = weights.Transpose() * input + Bias;
+            Zeta.Map(Activator.Apply, Activation);
         }
 
         public void UpdateParameters()
         {
-        }
-        public void BackPropagate(Matrix<double> upstreamWeightedErrors)
-        {
-            Matrix<double> zeta = WeightedError.Transpose() * Activation + Bias;
-            zeta.Map(Activator.ApplyDerivative);
-            Vector<double> res;
-            upstreamWeightedErrors.Multiply(WeightedError);
-            upstreamWeightedErrors.PointwiseMultiply(zeta);
+            //Vector<double> res;
+            var gradW = 1.0 / BatchSize * LastActivation * B.Transpose();
+            var gradB = 1.0 / BatchSize * B * Vector<double>.Build.Dense(BatchSize, 1);
             switch (GradientAdjustmentParameters.Type)
             {
+
                 case GradientAdjustmentType.FixedLearningRate:
-                    WeightedError.Multiply(1-((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * PenaltyCoefficient);
-                    WeightedError.Add(-((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * Activation * upstreamWeightedErrors.Transpose());
-                    res = upstreamWeightedErrors.RowSums();
-                    Bias.Add(-((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * res.ToColumnMatrix());
+                    Weights.Multiply(1.0-((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * PenaltyCoefficient, Weights);
+                    Weights.Add(-((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * gradW);
+                    for (int i = 0; i < BatchSize; i++)
+                    {
+                        Bias.SetColumn(i, Bias.Column(i) - ((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * gradB);
+                    }
                     break;
 
                 case GradientAdjustmentType.Adam:
-                    throw new NotImplementedException();
+                    /*SWeights.Multiply(((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay, SWeights);
+                    SWeights.Add((1.0 - ((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay) * gradW, SWeights);
+                    RWeights.Multiply(((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay);
+                    var g2 = gradW.PointwiseMultiply(gradW);
+                    RWeights.Add((1.0 - ((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay) * g2, RWeights);
+                    SWeights.CopyTo(SPWeights);
+                    SPWeights.Multiply(1.0 / (1.0 - Math.Pow(((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay, IndiceLayer)), SPWeights);
+                    RWeights.CopyTo(RPWeights);
+                    RPWeights.Multiply(1.0 / (1.0 - Math.Pow(((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay, IndiceLayer)), RPWeights);
+                    SPWeights.Multiply(-((AdamParameters)(GradientAdjustmentParameters)).StepSize, SPWeights);
+                    var sqrtrp = RPWeights.Clone();
+                    RPWeights.Map(Math.Sqrt, sqrtrp);
+                    sqrtrp.Add(((AdamParameters)(GradientAdjustmentParameters)).DenominatorFactor, sqrtrp);
+                    VelocityWeights = SPWeights.PointwiseDivide(sqrtrp);
+                    Weights.Add(VelocityWeights, Weights);
+                    SBias.Multiply(((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay, SBias);
+                    Matrix<double> gradBvect = Matrix<double>.Build.Dense(SBias.RowCount, SBias.ColumnCount, 0);
+                    for (int i = 0; i < BatchSize; i++)
+                    {
+                        gradBvect.SetColumn(i, gradB);
+                    }
+                    SBias.Add((1.0 - ((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay) * gradBvect, SBias);
+                    RBias.Multiply(((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay, RBias);
+                    var gB2 = gradBvect.PointwiseMultiply(gradBvect);
+                    RBias.Add((1.0 - ((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay) * gB2, RBias);
+                    SBias.CopyTo(SPBias);
+                    SPBias.Multiply(1.0 / (1.0 - Math.Pow(((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay, IndiceLayer)), SPBias);
+                    RBias.CopyTo(RPBias);
+                    RPBias.Multiply(1.0 / (1.0 - Math.Pow(((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay, IndiceLayer)), RPBias);
+                    SPBias.Multiply(-((AdamParameters)(GradientAdjustmentParameters)).StepSize, SPBias);
+                    var sqrtrpB = RPBias.Clone();
+                    RPBias.Map(Math.Sqrt, sqrtrpB);
+                    sqrtrpB.Add(((AdamParameters)(GradientAdjustmentParameters)).DenominatorFactor, sqrtrpB);
+                    VelocityBias = SPBias.PointwiseDivide(sqrtrpB);
+                    Bias.Add(VelocityBias, Bias);*/
                     break;
 
                 case GradientAdjustmentType.Momentum:
-                    WeightedError.Multiply(1 - ((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * PenaltyCoefficient);
-                    WeightedError.Multiply(-((MomentumParameters)(GradientAdjustmentParameters)).Momentum);
-                    WeightedError.Add(-((MomentumParameters)(GradientAdjustmentParameters)).LearningRate  * Activation * upstreamWeightedErrors.Transpose());
-                    res = upstreamWeightedErrors.RowSums();
-                    Bias.Multiply(-((MomentumParameters)(GradientAdjustmentParameters)).Momentum);
-                    Bias.Add(-((MomentumParameters)(GradientAdjustmentParameters)).LearningRate * res.ToColumnMatrix());
+                    /*velocityBias.Multiply(((MomentumParameters)(GradientAdjustmentParameters)).Momentum);
+                    for (int i = 0; i < BatchSize; i++)
+                    {
+                        velocityBias.SetColumn(i, velocityBias.Column(i) + ((MomentumParameters)(GradientAdjustmentParameters)).LearningRate * gradB);
+                    }
+                    Bias.Add(velocityBias, Bias);
+                    velocityWeights.Multiply(((MomentumParameters)(GradientAdjustmentParameters)).Momentum, velocityWeights);
+                    velocityWeights.Add(((MomentumParameters)(GradientAdjustmentParameters)).LearningRate * gradW, velocityWeights);
+                    Weights.Add(velocityWeights, Weights);*/
                     break;
 
                 default:
                     throw new InvalidOperationException("Unknown gradient accelerator parameter");
             }
+        }
+        public void BackPropagate(Matrix<double> upstreamWeightedErrors)
+        {
+            Matrix<double> ZetaPrime = Matrix<double>.Build.Dense(LayerSize, BatchSize, 0);
+            zeta.Map(Activator.ApplyDerivative, ZetaPrime);
+            B = ZetaPrime.PointwiseMultiply(upstreamWeightedErrors);
+            WeightedError = Weights * B;
 
         }
 
+
     }
 }
+
+

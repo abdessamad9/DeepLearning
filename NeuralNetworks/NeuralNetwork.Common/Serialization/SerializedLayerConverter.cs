@@ -45,7 +45,12 @@ namespace NeuralNetwork.Common.Serialization
                 case (int)LayerType.Dropout:
                     asset = new SerializedDropoutLayer();
                     break;
-
+                case (int)LayerType.L2Penalty:
+                    asset = new SerializedL2PenaltyLayer();
+                    break;
+                case (int)LayerType.WeightDecay:
+                    asset = new SerializedWeightDecayLayer();
+                    break;
                 default:
                     throw new InvalidOperationException("Unknown serialized layer");
             }

@@ -13,10 +13,8 @@ namespace NeuralNetwork.Common.Serialization
             UnderlyingSerializedLayer = underlyingSerializedLayer;
             PenaltyCoefficient = penaltyCoefficient;
         }
-        public SerializedL2PenaltyLayer()
-        {
-            
-        }
+
+        public SerializedL2PenaltyLayer() { }
 
         public LayerType Type => LayerType.L2Penalty;
 

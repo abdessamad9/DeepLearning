@@ -19,7 +19,7 @@ namespace NeuralNetwork.Serialization
             // Console.WriteLine("serializedNetwork.BatchSize" +serializedNetwork.BatchSize);
             for (int i = 0 ; i < serializedNetwork.SerializedLayers.Length; i++)
             {
-                network.Layers[i] = DeserializeLayer(serializedNetwork.SerializedLayers[i], network.BatchSize);
+                network.Layers[i] = DeserializeLayer(serializedNetwork.SerializedLayers[i], network.BatchSize, i+1);
                 
             }
             network.Output = Matrix<double>.Build.Dense(network.Layers[network.Layers.Length -1].Activation.RowCount , network.Layers[network.Layers.Length -1].Activation.ColumnCount);
@@ -29,7 +29,7 @@ namespace NeuralNetwork.Serialization
         }
 
 
-        public static ILayer DeserializeLayer(ISerializedLayer seLayer, int batchSize)
+        public static ILayer DeserializeLayer(ISerializedLayer seLayer, int batchSize, double indice)
         {
             IActivator activator;
             ILayer layer;
@@ -39,7 +39,7 @@ namespace NeuralNetwork.Serialization
                     SerializedStandardLayer standard = (SerializedStandardLayer)seLayer;
                
                     activator = ActivatorNew(standard.ActivatorType);
-                    layer = new Standard(batchSize, activator, standard.Bias, standard.Weights, standard.GradientAdjustmentParameters);
+                    layer = new Standard(batchSize, activator, standard.Bias, standard.Weights, standard.GradientAdjustmentParameters, indice);
 
                     return layer;
                 /** case LayerType.Dropout:

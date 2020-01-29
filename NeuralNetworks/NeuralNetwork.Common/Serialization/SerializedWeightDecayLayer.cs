@@ -13,13 +13,8 @@ namespace NeuralNetwork.Common.Serialization
             UnderlyingSerializedLayer = underlyingSerializedLayer;
             DecayRate = decayRate;
         }
-        public SerializedWeightDecayLayer()
-        {
-           
-        }
 
-        public int LayerSize { get; set; }
-
+        public SerializedWeightDecayLayer() { }
         public LayerType Type => LayerType.WeightDecay;
 
         public ISerializedLayer UnderlyingSerializedLayer { get; set; }
