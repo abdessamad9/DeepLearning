@@ -4,7 +4,7 @@ using System.Text;
 using NeuralNetwork.Common.Activators;
 namespace NeuralNetwork.Activators
 {
-    class Identity : IActivator
+    public  class Identity : IActivator
     {
         public Identity()
         {

@@ -9,7 +9,7 @@ using NeuralNetwork.Common.GradientAdjustmentsParameters;
 using NeuralNetwork.Common.Layers;
 namespace NeuralNetwork.Layers
 {
-    class L2Penalty : ILayer
+    public  class L2Penalty : ILayer
     {
         //
         public L2Penalty(int batchSize, IActivator activator, double[] bias, double[,] weights, IGradientAdjustmentParameters gradientAdjustmentParameters, double indiceLayer, double penaltyCoefficient)

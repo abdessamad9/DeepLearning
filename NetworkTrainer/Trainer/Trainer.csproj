@@ -15,6 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="DataProviders">
+      <HintPath>..\..\NeuralNetworks\DataProviders\obj\x64\Debug\netstandard2.0\DataProviders.dll</HintPath>
+    </Reference>
+    <Reference Include="NeuralNetwork">
+      <HintPath>..\..\NeuralNetworks\NeuralNetwork\obj\x64\Debug\netstandard2.0\NeuralNetwork.dll</HintPath>
+    </Reference>
     <Reference Include="NeuralNetwork.Common">
       <HintPath>..\..\NeuralNetworks\NeuralNetwork.Common\obj\x64\Debug\netstandard2.0\NeuralNetwork.Common.dll</HintPath>
     </Reference>
