@@ -9,7 +9,7 @@ using NeuralNetwork.Common.GradientAdjustmentsParameters;
 using NeuralNetwork.Common.Layers;
 namespace NeuralNetwork.Layers
 {
-    public class L2Penalty : ILayer
+    public class L2Penalty : Layer
     {
         public L2Penalty(ILayer layer, double penaltyCoefficient)
         {
@@ -116,6 +116,15 @@ namespace NeuralNetwork.Layers
                 ((Standard)UnderlyingLayer).WeightedError = value;
             }
 
+        }
+
+        LayerType type;
+        public LayerType Type
+        {
+            get
+            {
+                return LayerType.L2Penalty;
+            }
         }
 
         public bool Equals(ILayer other)

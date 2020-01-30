@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 using NeuralNetwork.Common.Activators;
 using NeuralNetwork.Common.GradientAdjustmentParameters;
 using NeuralNetwork.Common.GradientAdjustmentsParameters;
 using NeuralNetwork.Common.Layers;
 namespace NeuralNetwork.Layers
 {
-    public class WeightDecay : ILayer
+    public class WeightDecay : Layer
     {
         //
         public WeightDecay(ILayer layer,  double decayRate)
@@ -116,6 +117,14 @@ namespace NeuralNetwork.Layers
                 ((Standard)UnderlyingLayer).WeightedError = value;
             }
 
+        }
+
+        public LayerType Type
+        {
+            get
+            {
+                return LayerType.WeightDecay;
+            }
         }
 
         public bool Equals(ILayer other)

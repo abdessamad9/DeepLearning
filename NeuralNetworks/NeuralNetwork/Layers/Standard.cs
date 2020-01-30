@@ -10,7 +10,7 @@ using NeuralNetwork.Common.Layers;
 
 namespace NeuralNetwork.Layers
 {
-    public class Standard : ILayer
+    public class Standard : Layer
     {
         //
         public Standard( int batchSize, IActivator activator, double[] bias, double[,] weights, IGradientAdjustmentParameters gradientAdjustmentParameters, double indiceLayer)
@@ -340,6 +340,15 @@ namespace NeuralNetwork.Layers
             set
             {
                 this.weightedError = value;
+            }
+        }
+
+        LayerType type;
+        public LayerType Type
+        {
+            get
+            {
+                return LayerType.Standard;
             }
         }
         

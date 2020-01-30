@@ -33,6 +33,7 @@ namespace NeuralNetwork.Serialization
         {
             IActivator activator;
             ILayer layer;
+
             switch (seLayer.Type)
             {
                 case LayerType.Standard:
