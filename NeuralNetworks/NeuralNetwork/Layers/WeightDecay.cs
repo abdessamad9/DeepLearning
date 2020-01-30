@@ -2,48 +2,57 @@
 using System.Collections.Generic;
 using System.Text;
 using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 using NeuralNetwork.Common.Activators;
 using NeuralNetwork.Common.GradientAdjustmentParameters;
 using NeuralNetwork.Common.GradientAdjustmentsParameters;
 using NeuralNetwork.Common.Layers;
 namespace NeuralNetwork.Layers
 {
-    public class WeightDecay:Layer
+    public class WeightDecay : Layer
     {
-        public WeightDecay(int layerSize, int inputSize, int batchSize, IActivator activator, Matrix<double> bias, Matrix<double> activation, Matrix<double> weightedError, IGradientAdjustmentParameters gradientAdjustmentParameters, double decayRate)
+        //
+        public WeightDecay(ILayer layer,  double decayRate)
         {
-            LayerSize = layerSize;
-            InputSize = inputSize;
-            BatchSize = batchSize;
-            Activator = activator;
-            Bias = bias;
-            Activation = activation;
-            WeightedError = weightedError;
-            GradientAdjustmentParameters = gradientAdjustmentParameters;
+            UnderlyingLayer = layer;
             DecayRate = decayRate;
         }
 
+        double decayRate;
         public double DecayRate
         {
             get
             {
-                return DecayRate;
+                return decayRate;
             }
             set
             {
-                DecayRate = value;
+                this.decayRate = value;
             }
         }
 
-        public IGradientAdjustmentParameters GradientAdjustmentParameters
+        ILayer underlyingLayer;
+        public ILayer UnderlyingLayer
         {
             get
             {
-                return GradientAdjustmentParameters;
+                return underlyingLayer;
             }
             set
             {
-                GradientAdjustmentParameters = value;
+                this.underlyingLayer = value;
+            }
+        }
+        double indiceLayer;
+        public double IndiceLayer
+        {
+            get
+            {
+                return indiceLayer;
+            }
+            set
+            {
+                this.indiceLayer = value;
             }
         }
 
@@ -51,86 +60,65 @@ namespace NeuralNetwork.Layers
         {
             get
             {
-                return LayerSize;
+                return ((Standard)UnderlyingLayer).LayerSize;
             }
             set
             {
-                this.LayerSize = value;
+                ((Standard)UnderlyingLayer).LayerSize = value;
             }
+
         }
+
         public int InputSize
         {
             get
             {
-                return InputSize;
+                return ((Standard)UnderlyingLayer).InputSize;
             }
             set
             {
-                this.InputSize = value;
+                ((Standard)UnderlyingLayer).InputSize = value;
             }
-        }
 
-        public IActivator Activator
-        {
-            get
-            {
-                return Activator;
-            }
-            set
-            {
-                this.Activator = value;
-            }
         }
-
-        public Matrix<double> Bias
-        {
-            get
-            {
-                return Bias;
-            }
-            set
-            {
-                this.Bias = value;
-            }
-        }
-
 
         public int BatchSize
         {
             get
             {
-                return BatchSize;
+                return ((Standard)UnderlyingLayer).BatchSize;
             }
             set
             {
-                this.BatchSize = value;
+                ((Standard)UnderlyingLayer).BatchSize = value;
             }
-        }
 
+        }
         public Matrix<double> Activation
         {
             get
             {
-                return Activation;
+                return ((Standard)UnderlyingLayer).Activation;
             }
             set
             {
-                this.Activation = value;
+                ((Standard)UnderlyingLayer).Activation = value;
             }
-        }
 
+        }
         public Matrix<double> WeightedError
         {
             get
             {
-                return WeightedError;
+                return ((Standard)UnderlyingLayer).WeightedError;
             }
             set
             {
-                this.WeightedError = value;
+                ((Standard)UnderlyingLayer).WeightedError = value;
             }
+
         }
-        LayerType type;
+
         public LayerType Type
         {
             get
@@ -138,54 +126,30 @@ namespace NeuralNetwork.Layers
                 return LayerType.WeightDecay;
             }
         }
+
         public bool Equals(ILayer other)
         {
-            return WeightedError == other.WeightedError && Activation == other.Activation && LayerSize == other.LayerSize && InputSize == other.InputSize && BatchSize == other.BatchSize;
+            return UnderlyingLayer.Equals(other);
         }
 
         public void Propagate(Matrix<double> input)
         {
-            System.Diagnostics.Debug.Assert(input.RowCount == 1 && input.ColumnCount == LayerSize, "Dimensions incompatibles");
-            Activation = WeightedError.Transpose() * input + Bias;
-            Activation.Map(Activator.Apply);
+            UnderlyingLayer.Propagate(input);
         }
 
         public void UpdateParameters()
         {
+            //Vector<double> res;
+            double coefficient = ((Standard)UnderlyingLayer).Computation();
+            ((Standard)UnderlyingLayer).UpdateBias(((Standard)UnderlyingLayer).VelocityBias, 1 - decayRate);
+            ((Standard)UnderlyingLayer).UpdateWeights(((Standard)UnderlyingLayer).VelocityWeights, 1 - decayRate);
         }
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
-            Matrix<double> zeta = WeightedError.Transpose() * Activation + Bias;
-            zeta.Map(Activator.ApplyDerivative);
-            Vector<double> res;
-            upstreamWeightedErrors.Multiply(WeightedError);
-            upstreamWeightedErrors.PointwiseMultiply(zeta);
-            switch (GradientAdjustmentParameters.Type)
-            {
-                case GradientAdjustmentType.FixedLearningRate:
-                    WeightedError.Multiply(1 - DecayRate);
-                    WeightedError.Add(-((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * Activation * upstreamWeightedErrors.Transpose());
-                    res = upstreamWeightedErrors.RowSums();
-                    Bias.Add(-((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * res.ToColumnMatrix());
-                    break;
-
-                case GradientAdjustmentType.Adam:
-                    throw new NotImplementedException();
-                    break;
-
-                case GradientAdjustmentType.Momentum:
-                    WeightedError.Multiply(1 - DecayRate);
-                    WeightedError.Multiply(-((MomentumParameters)(GradientAdjustmentParameters)).Momentum);
-                    WeightedError.Add(-((MomentumParameters)(GradientAdjustmentParameters)).LearningRate * Activation * upstreamWeightedErrors.Transpose());
-                    res = upstreamWeightedErrors.RowSums();
-                    Bias.Multiply(-((MomentumParameters)(GradientAdjustmentParameters)).Momentum);
-                    Bias.Add(-((MomentumParameters)(GradientAdjustmentParameters)).LearningRate * res.ToColumnMatrix());
-                    break;
-
-                default:
-                    throw new InvalidOperationException("Unknown gradient accelerator parameter");
-            }
+            UnderlyingLayer.BackPropagate(upstreamWeightedErrors);
 
         }
+
+
     }
 }

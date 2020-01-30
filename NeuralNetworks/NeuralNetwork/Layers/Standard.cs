@@ -461,7 +461,7 @@ namespace NeuralNetwork.Layers
         {
             Matrix<double> ZetaPrime = Matrix<double>.Build.Dense(LayerSize,BatchSize,0);
             zeta.Map(Activator.ApplyDerivative,ZetaPrime);
-            B = ZetaPrime.PointwiseMultiply(upstreamWeightedErrors);
+            ZetaPrime.PointwiseMultiply(upstreamWeightedErrors,B);
             WeightedError = Weights * B;
 
         }

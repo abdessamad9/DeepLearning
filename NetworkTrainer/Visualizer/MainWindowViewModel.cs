@@ -155,7 +155,7 @@ namespace Visualizer
                 if (result == DialogResult.OK)
                 {
                     InitialSerializedNetwork = JsonConvert.DeserializeObject<SerializedNetwork>(File.ReadAllText(dialog.FileName));
-                     CurrentNetwork = NetworkDeserializer.Deserialize(InitialSerializedNetwork);
+                    CurrentNetwork = NetworkDeserializer.Deserialize(InitialSerializedNetwork);
                 }
             }
         }
