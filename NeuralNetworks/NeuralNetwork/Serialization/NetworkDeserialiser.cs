@@ -48,7 +48,15 @@ namespace NeuralNetwork.Serialization
                     activator = ActivatorNew(under.ActivatorType);
                     Standard layerUnder = new Standard(batchSize,activator, under.Bias, under.Weights, under.GradientAdjustmentParameters, indice);
                     activator = ActivatorNew(under.ActivatorType);
-                    layer = new L2Penalty(layerUnder, indice, l2penalty.PenaltyCoefficient);
+                    layer = new L2Penalty(layerUnder, l2penalty.PenaltyCoefficient);
+                    return layer;
+                case LayerType.WeightDecay:
+                    SerializedWeightDecayLayer weightDecay = (SerializedWeightDecayLayer)seLayer;
+                    SerializedStandardLayer under2 = (SerializedStandardLayer)(weightDecay.UnderlyingSerializedLayer);
+                    activator = ActivatorNew(under2.ActivatorType);
+                    Standard layerUnder2 = new Standard(batchSize, activator, under2.Bias, under2.Weights, under2.GradientAdjustmentParameters, indice);
+                    activator = ActivatorNew(under2.ActivatorType);
+                    layer = new WeightDecay(layerUnder2, weightDecay.DecayRate);
                     return layer;
                 /** case LayerType.Dropout:
                      SerializedDropoutLayer dropoutLayer  = (SerializedDropoutLayer)seLayer;

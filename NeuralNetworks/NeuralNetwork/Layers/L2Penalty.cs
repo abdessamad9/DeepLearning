@@ -11,14 +11,9 @@ namespace NeuralNetwork.Layers
 {
     public class L2Penalty : ILayer
     {
-        //
-        public L2Penalty(ILayer layer, double indiceLayer, double penaltyCoefficient)
+        public L2Penalty(ILayer layer, double penaltyCoefficient)
         {
-
-
             UnderlyingLayer = layer;
-            IndiceLayer = indiceLayer;
-
             PenaltyCoefficient = penaltyCoefficient;
         }
 
