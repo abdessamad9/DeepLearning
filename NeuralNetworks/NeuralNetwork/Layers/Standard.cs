@@ -350,6 +350,7 @@ namespace NeuralNetwork.Layers
 
         public void Propagate(Matrix<double> input)
         {
+                                                               
             LastActivation = input;
             Zeta = weights.Transpose() * input + Bias;
             Zeta.Map(Activator.Apply, Activation);
