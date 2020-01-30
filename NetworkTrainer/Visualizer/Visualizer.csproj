@@ -58,9 +58,8 @@
     <Reference Include="CommonServiceLocator, Version=2.0.5.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.5\lib\net46\CommonServiceLocator.dll</HintPath>
     </Reference>
-    <Reference Include="DataProviders, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\NeuralNetworks\DataProviders\obj\x64\Debug\netstandard2.0\DataProviders.dll</HintPath>
+    <Reference Include="DataProviders">
+      <HintPath>..\..\NeuralNetworks\DataProviders\obj\Debug\netstandard2.0\DataProviders.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
@@ -71,13 +70,11 @@
     <Reference Include="MathNet.Numerics, Version=4.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MathNet.Numerics.4.9.0\lib\net461\MathNet.Numerics.dll</HintPath>
     </Reference>
-    <Reference Include="NeuralNetwork, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\NeuralNetworks\NeuralNetwork\obj\x64\Debug\netstandard2.0\NeuralNetwork.dll</HintPath>
+    <Reference Include="NeuralNetwork">
+      <HintPath>..\..\NeuralNetworks\NeuralNetwork\obj\Debug\netstandard2.0\NeuralNetwork.dll</HintPath>
     </Reference>
-    <Reference Include="NeuralNetwork.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\NeuralNetworks\NeuralNetwork.Common\obj\x64\Debug\netstandard2.0\NeuralNetwork.Common.dll</HintPath>
+    <Reference Include="NeuralNetwork.Common">
+      <HintPath>..\..\NeuralNetworks\NeuralNetwork.Common\obj\Debug\netstandard2.0\NeuralNetwork.Common.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
