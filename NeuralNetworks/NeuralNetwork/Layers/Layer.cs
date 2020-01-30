@@ -11,21 +11,13 @@ using NeuralNetwork.Common.Layers;
 
 namespace NeuralNetwork.Layers
 {
-    public class Layer : ILayer
+    public interface Layer : ILayer
     {
-       
-        int layerSize;
-        public int LayerSize
-        {
-            get
-            {
-                return layerSize;
-            }
-            set
-            {
-                this.layerSize = value;
-            }
-        }
+
+        LayerType Type { get; }
+        /*int layerSize;
+      
+
         int inputSize;
         public int InputSize
         {
@@ -53,29 +45,29 @@ namespace NeuralNetwork.Layers
             }
         }
 
-        LayerType Type { get; set; }
+       
 
 
 
-        void Propagate(Matrix<double> input)
+        public void Propagate(Matrix<double> input)
             {
 
             }
 
 
-        void BackPropagate(Matrix<double> upstreamWeightedErrors)
+        public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
 
         }
 
   
-        void UpdateParameters()
+        public void UpdateParameters()
         {
 
         }
 
         Matrix<double> activation;
-        public Matrix<double> Activation
+        public  Matrix<double> Activation
         {
             get
             {
@@ -85,6 +77,11 @@ namespace NeuralNetwork.Layers
             {
                 this.activation = value;
             }
+        }
+
+        public bool Equals(ILayer other)
+        {
+            return LayerSize == other.LayerSize && InputSize == other.InputSize && BatchSize == other.BatchSize;
         }
 
         Matrix<double> weightedError;
@@ -98,7 +95,7 @@ namespace NeuralNetwork.Layers
             {
                 this.weightedError = value;
             }
-        }
+        }*/
 
     }
 }
