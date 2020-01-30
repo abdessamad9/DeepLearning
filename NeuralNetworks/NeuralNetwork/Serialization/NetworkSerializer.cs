@@ -55,9 +55,9 @@ namespace NeuralNetwork.Serialization
 
                 case LayerType.WeightDecay:
                     WeightDecay weight = (WeightDecay)layer;
-                    //    under = weight.UnderlyingLayer;
+                    under = weight.UnderlyingLayer;
 
-                    seriaLayer = new SerializedWeightDecayLayer(); //(SerializeLayer(under), weight.DecayRate);
+                    seriaLayer = new SerializedWeightDecayLayer(SerializeLayer(under), weight.DecayRate);
                     return seriaLayer;
 
                 default:

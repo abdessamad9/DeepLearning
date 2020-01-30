@@ -179,6 +179,8 @@ namespace TestPricing
             {
                 serializer.Serialize(writer, serialized);
             }
+
+            Console.Read();
         }
     }
 }
