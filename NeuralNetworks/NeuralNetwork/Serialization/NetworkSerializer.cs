@@ -30,7 +30,7 @@ namespace NeuralNetwork.Serialization
         {
             ISerializedLayer seriaLayer;
             Layer nlayer = (Layer)layer;
-
+            ILayer under;
             switch (nlayer.Type)
             {
                 case LayerType.Dropout:
@@ -47,11 +47,17 @@ namespace NeuralNetwork.Serialization
                     return seriaLayer;
 
                 case LayerType.L2Penalty:
-                    seriaLayer = new SerializedL2PenaltyLayer();
+                    L2Penalty layerPenalty = (L2Penalty)layer;
+                    under = layerPenalty.UnderlyingLayer;
+                    
+                    seriaLayer = new SerializedL2PenaltyLayer( SerializeLayer(under), layerPenalty.PenaltyCoefficient);
                     return seriaLayer;
 
                 case LayerType.WeightDecay:
-                    seriaLayer = new SerializedWeightDecayLayer();
+                    WeightDecay weight = (WeightDecay)layer;
+                    //    under = weight.UnderlyingLayer;
+
+                    seriaLayer = new SerializedWeightDecayLayer(); //(SerializeLayer(under), weight.DecayRate);
                     return seriaLayer;
 
                 default:
