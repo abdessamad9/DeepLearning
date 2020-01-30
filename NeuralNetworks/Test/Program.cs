@@ -76,10 +76,10 @@ namespace TestPricing
               network.Layers[3] = new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), new MomentumParameters(), 4);
 
 
-            network.Layers[0] = new L2Penalty(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), new MomentumParameters(), 1), 1, 0.1);
-            network.Layers[1] = new L2Penalty(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), new MomentumParameters(), 2), 2, 0.1);
-            network.Layers[2] = new L2Penalty(new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), new MomentumParameters(), 3), 3, 0.1);
-            network.Layers[3] = new L2Penalty(new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), new MomentumParameters(), 4), 4, 0.1);
+            network.Layers[0] = new L2Penalty(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), new MomentumParameters(), 1),  0.1);
+            network.Layers[1] = new L2Penalty(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), new MomentumParameters(), 2), 0.1);
+            network.Layers[2] = new L2Penalty(new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), new MomentumParameters(), 3), 0.1);
+            network.Layers[3] = new L2Penalty(new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), new MomentumParameters(), 4), 0.1);
             var serialized = NetworkSerializer.Serialize(network);
              JsonSerializer serializer = new JsonSerializer();
              var filename = "../../../JSON/my-network_Penalty_Tanh_Momemtum.json"; //"../../../JSON/my-network_Tanh_Adam.json";  "../../../my-network_Tanh_Momemtum.json";
