@@ -8,7 +8,7 @@ using NeuralNetwork.Common.GradientAdjustmentsParameters;
 using NeuralNetwork.Common.Layers;
 namespace NeuralNetwork.Layers
 {
-    public class WeightDecay:ILayer
+    public class WeightDecay:Layer
     {
         public WeightDecay(int layerSize, int inputSize, int batchSize, IActivator activator, Matrix<double> bias, Matrix<double> activation, Matrix<double> weightedError, IGradientAdjustmentParameters gradientAdjustmentParameters, double decayRate)
         {
@@ -130,7 +130,14 @@ namespace NeuralNetwork.Layers
                 this.WeightedError = value;
             }
         }
-
+        LayerType type;
+        public LayerType Type
+        {
+            get
+            {
+                return LayerType.WeightDecay;
+            }
+        }
         public bool Equals(ILayer other)
         {
             return WeightedError == other.WeightedError && Activation == other.Activation && LayerSize == other.LayerSize && InputSize == other.InputSize && BatchSize == other.BatchSize;

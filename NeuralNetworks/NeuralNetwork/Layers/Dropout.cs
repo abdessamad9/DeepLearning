@@ -9,7 +9,7 @@ using NeuralNetwork.Common.Layers;
 
 namespace NeuralNetwork.Layers
 {
-    public class Dropout:ILayer
+    public class Dropout:Layer
     {
         public Dropout(int layerSize, int inputSize, int batchSize, IActivator activator, Matrix<double> bias, Matrix<double> activation, Matrix<double> weightedError, IGradientAdjustmentParameters gradientAdjustmentParameters, double keepProbability)
         {
@@ -129,6 +129,16 @@ namespace NeuralNetwork.Layers
             set
             {
                 this.WeightedError = value;
+            }
+        }
+
+
+        LayerType type;
+        public LayerType Type
+        {
+            get
+            {
+                return LayerType.Standard;
             }
         }
 

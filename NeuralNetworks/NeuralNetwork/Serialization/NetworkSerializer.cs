@@ -29,16 +29,19 @@ namespace NeuralNetwork.Serialization
         public static ISerializedLayer SerializeLayer(ILayer layer)
         {
             ISerializedLayer seriaLayer;
-            /*switch (layer.Type)
+            Layer nlayer = (Layer)layer;
+
+            switch (nlayer.Type)
             {
                 case LayerType.Dropout:
                      seriaLayer = new SerializedDropoutLayer();
                     return seriaLayer; 
 
                 case LayerType.Standard:
-                    seriaLayer = new SerializedStandardLayer();
+                    Standard layerStandard = (Standard)layer;
+                    seriaLayer = new SerializedStandardLayer(layerStandard.Bias.Column(0).ToArray(), layerStandard.Weights.ToArray(), layerStandard.Activator.Type, layerStandard.GradientAdjustmentParameters);
                     return seriaLayer;
-             
+
                 case LayerType.InputStandardizing:
                     seriaLayer = new SerializedInputStandardizingLayer();
                     return seriaLayer;
@@ -53,10 +56,8 @@ namespace NeuralNetwork.Serialization
 
                 default:
                     return null;
-            }*/
-            Standard layerStandard = (Standard)layer;
-            seriaLayer = new SerializedStandardLayer(layerStandard.Bias.Column(0).ToArray(), layerStandard.Weights.ToArray(),layerStandard.Activator.Type, layerStandard.GradientAdjustmentParameters);
-            return seriaLayer;
+            }
+            
 
         }
 
