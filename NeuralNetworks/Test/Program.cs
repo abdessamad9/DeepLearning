@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using NeuralNetwork;
 using NeuralNetwork.Common;
-using NeuralNetwork.Activators;
+
 using NeuralNetwork.Layers;
 using NeuralNetwork.Common.Activators;
 
-using NeuralNetwork.Common.Activators;
-
+using NeuralNetwork.Activators;
+using NeuralNetwork.Layers;
 using NeuralNetwork.Serialization;
 using Newtonsoft.Json;
 

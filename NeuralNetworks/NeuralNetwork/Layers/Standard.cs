@@ -357,42 +357,51 @@ namespace NeuralNetwork.Layers
 
         public void UpdateParameters()
         {
+            Computation();
+            UpdateBias(VelocityBias, 1.0);
+            UpdateWeights(VelocityWeights, 1.0);
+        }
+
+        public double Computation()
+        {
             //Vector<double> res;
             var gradW = 1.0 / BatchSize * LastActivation * B.Transpose();
             var gradB = 1.0 / BatchSize * B * Vector<double>.Build.Dense(BatchSize, 1);
+            Matrix<double> gradBvect = Matrix<double>.Build.Dense(SBias.RowCount, SBias.ColumnCount, 0);
+            for (int i = 0; i < BatchSize; i++)
+            {
+                gradBvect.SetColumn(i, gradB);
+            }
+            double coefficient = 1.0;
             switch (GradientAdjustmentParameters.Type)
             {
-                
                 case GradientAdjustmentType.FixedLearningRate:
-                    Weights.Add(-((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * gradW,Weights);
-                    for(int i= 0; i < BatchSize; i++)
-                    {
-                        Bias.SetColumn(i,  Bias.Column(i) - ((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate * gradB);
-                    }
+                    coefficient = ((FixedLearningRateParameters)(GradientAdjustmentParameters)).LearningRate;
+                    VelocityWeights.Multiply(-coefficient, VelocityWeights);    
+                    gradBvect.Multiply(-coefficient, gradBvect);
+                    gradBvect.CopyTo(VelocityBias);
+                    
                     break;
 
                 case GradientAdjustmentType.Adam:
+                    coefficient = ((AdamParameters)(GradientAdjustmentParameters)).StepSize;
                     SWeights.Multiply(((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay, SWeights);
-                    SWeights.Add((1.0- ((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay)* gradW, SWeights);
+                    SWeights.Add((1.0 - ((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay) * gradW, SWeights);
                     RWeights.Multiply(((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay);
                     var g2 = gradW.PointwiseMultiply(gradW);
                     RWeights.Add((1.0 - ((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay) * g2, RWeights);
                     SWeights.CopyTo(SPWeights);
-                    SPWeights.Multiply(1.0 / (1.0 - Math.Pow(((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay,IndiceLayer)), SPWeights);
+                    SPWeights.Multiply(1.0 / (1.0 - Math.Pow(((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay, IndiceLayer)), SPWeights);
                     RWeights.CopyTo(RPWeights);
                     RPWeights.Multiply(1.0 / (1.0 - Math.Pow(((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay, IndiceLayer)), RPWeights);
-                    SPWeights.Multiply(-((AdamParameters)(GradientAdjustmentParameters)).StepSize, SPWeights);
-                    var sqrtrp= RPWeights.Clone();
+                    SPWeights.Multiply(-coefficient, SPWeights);
+                    var sqrtrp = RPWeights.Clone();
                     RPWeights.Map(Math.Sqrt, sqrtrp);
                     sqrtrp.Add(((AdamParameters)(GradientAdjustmentParameters)).DenominatorFactor, sqrtrp);
                     VelocityWeights = SPWeights.PointwiseDivide(sqrtrp);
-                    Weights.Add(VelocityWeights, Weights);
+                    
+
                     SBias.Multiply(((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay, SBias);
-                    Matrix<double> gradBvect = Matrix<double>.Build.Dense(SBias.RowCount, SBias.ColumnCount, 0);
-                    for (int i = 0; i < BatchSize; i++)
-                    {
-                        gradBvect.SetColumn(i, gradB);
-                    }
                     SBias.Add((1.0 - ((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay) * gradBvect, SBias);
                     RBias.Multiply(((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay, RBias);
                     var gB2 = gradBvect.PointwiseMultiply(gradBvect);
@@ -401,29 +410,42 @@ namespace NeuralNetwork.Layers
                     SPBias.Multiply(1.0 / (1.0 - Math.Pow(((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay, IndiceLayer)), SPBias);
                     RBias.CopyTo(RPBias);
                     RPBias.Multiply(1.0 / (1.0 - Math.Pow(((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay, IndiceLayer)), RPBias);
-                    SPBias.Multiply(-((AdamParameters)(GradientAdjustmentParameters)).StepSize, SPBias);
+                    SPBias.Multiply(-coefficient, SPBias);
                     var sqrtrpB = RPBias.Clone();
                     RPBias.Map(Math.Sqrt, sqrtrpB);
                     sqrtrpB.Add(((AdamParameters)(GradientAdjustmentParameters)).DenominatorFactor, sqrtrpB);
                     VelocityBias = SPBias.PointwiseDivide(sqrtrpB);
-                    Bias.Add(VelocityBias, Bias);
+                    
                     break;
 
                 case GradientAdjustmentType.Momentum:
+                    coefficient = ((MomentumParameters)(GradientAdjustmentParameters)).LearningRate;
                     velocityBias.Multiply(((MomentumParameters)(GradientAdjustmentParameters)).Momentum);
                     for (int i = 0; i < BatchSize; i++)
                     {
-                        velocityBias.SetColumn(i, velocityBias.Column(i) - ((MomentumParameters)(GradientAdjustmentParameters)).LearningRate * gradB);
+                        velocityBias.SetColumn(i, velocityBias.Column(i) - coefficient * gradB);
                     }
-                    Bias.Add(velocityBias, Bias);
+                    
                     velocityWeights.Multiply(((MomentumParameters)(GradientAdjustmentParameters)).Momentum, velocityWeights);
-                    velocityWeights.Add(-((MomentumParameters)(GradientAdjustmentParameters)).LearningRate * gradW, velocityWeights);
-                    Weights.Add(velocityWeights, Weights);
+                    velocityWeights.Add(-coefficient * gradW, velocityWeights);
+                    
                     break;
 
                 default:
                     throw new InvalidOperationException("Unknown gradient accelerator parameter");
             }
+            return coefficient;
+        }
+
+        public void UpdateWeights(Matrix<double> velocity, double coefficient)
+        {
+            Weights.Multiply(coefficient, Weights);
+            Weights.Add(velocity, Weights);
+        }
+        public void UpdateBias(Matrix<double> velocity, double coefficient)
+        {
+            Bias.Multiply(coefficient, Bias);
+            Bias.Add(velocity, Bias);
         }
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {

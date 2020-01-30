@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.329
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetwork", "NeuralNetwork\NeuralNetwork.csproj", "{AFA54CB1-B8DB-4BC3-BA62-EA30AAD46FDD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetwork.Common", "NeuralNetwork.Common\NeuralNetwork.Common.csproj", "{9A2FFD98-F71C-4206-9FEE-28E2F3EB3EC4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataProviders", "DataProviders\DataProviders.csproj", "{A84829DC-1AD0-4ED6-9754-BF5F0B0CABD2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPricing", "Test\TestPricing.csproj", "{D18F919E-3C11-43EC-9C39-1B501F3206FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,18 +55,6 @@ Global
 		{A84829DC-1AD0-4ED6-9754-BF5F0B0CABD2}.Release|x64.Build.0 = Release|x64
 		{A84829DC-1AD0-4ED6-9754-BF5F0B0CABD2}.Release|x86.ActiveCfg = Release|Any CPU
 		{A84829DC-1AD0-4ED6-9754-BF5F0B0CABD2}.Release|x86.Build.0 = Release|Any CPU
-		{D18F919E-3C11-43EC-9C39-1B501F3206FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D18F919E-3C11-43EC-9C39-1B501F3206FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D18F919E-3C11-43EC-9C39-1B501F3206FA}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D18F919E-3C11-43EC-9C39-1B501F3206FA}.Debug|x64.Build.0 = Debug|Any CPU
-		{D18F919E-3C11-43EC-9C39-1B501F3206FA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D18F919E-3C11-43EC-9C39-1B501F3206FA}.Debug|x86.Build.0 = Debug|Any CPU
-		{D18F919E-3C11-43EC-9C39-1B501F3206FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D18F919E-3C11-43EC-9C39-1B501F3206FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D18F919E-3C11-43EC-9C39-1B501F3206FA}.Release|x64.ActiveCfg = Release|Any CPU
-		{D18F919E-3C11-43EC-9C39-1B501F3206FA}.Release|x64.Build.0 = Release|Any CPU
-		{D18F919E-3C11-43EC-9C39-1B501F3206FA}.Release|x86.ActiveCfg = Release|Any CPU
-		{D18F919E-3C11-43EC-9C39-1B501F3206FA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

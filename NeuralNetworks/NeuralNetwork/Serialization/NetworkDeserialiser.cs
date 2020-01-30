@@ -37,10 +37,18 @@ namespace NeuralNetwork.Serialization
             {
                 case LayerType.Standard:
                     SerializedStandardLayer standard = (SerializedStandardLayer)seLayer;
-               
+                    
                     activator = ActivatorNew(standard.ActivatorType);
                     layer = new Standard(batchSize, activator, standard.Bias, standard.Weights, standard.GradientAdjustmentParameters, indice);
 
+                    return layer;
+                case LayerType.L2Penalty:
+                    SerializedL2PenaltyLayer l2penalty = (SerializedL2PenaltyLayer)seLayer;
+                    SerializedStandardLayer under = (SerializedStandardLayer)(l2penalty.UnderlyingSerializedLayer);
+                    activator = ActivatorNew(under.ActivatorType);
+                    Standard layerUnder = new Standard(batchSize,activator, under.Bias, under.Weights, under.GradientAdjustmentParameters, indice);
+                    activator = ActivatorNew(under.ActivatorType);
+                    layer = new L2Penalty(layerUnder, indice, l2penalty.PenaltyCoefficient);
                     return layer;
                 /** case LayerType.Dropout:
                      SerializedDropoutLayer dropoutLayer  = (SerializedDropoutLayer)seLayer;
