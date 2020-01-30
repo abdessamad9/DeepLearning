@@ -70,10 +70,10 @@ namespace TestPricing
             network.Layers[3] = new L2Penalty( new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), new AdamParameters(0.01, 0.9, 0.99,0.0000001), 4), 4,0.1);*/
 
 
-            /* network.Layers[0] = new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), new MomentumParameters(), 1);
+            network.Layers[0] = new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), new MomentumParameters(), 1);
               network.Layers[1] = new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), new MomentumParameters(), 2);
               network.Layers[2] = new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), new MomentumParameters(), 3);
-              network.Layers[3] = new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), new MomentumParameters(), 4);*/
+              network.Layers[3] = new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), new MomentumParameters(), 4);
 
 
             network.Layers[0] = new L2Penalty(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), new MomentumParameters(), 1), 1, 0.1);
