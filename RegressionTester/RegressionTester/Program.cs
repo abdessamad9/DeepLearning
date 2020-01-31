@@ -11,8 +11,8 @@ namespace RegressionTester
     {
         private static void Main(string[] args)
         {
-            var serializedNetworkFile = "C:\\Users\\ensimag\\Documents\\backtestforwardtest\\Projet\\DeepLearning\\NeuralNetworks\\JSON\\my-network_Penalty_LeakyReLU_Adam_Serialized_170.json";
-            var outputFile = "C:\\Users\\ensimag\\Documents\\backtestforwardtest\\Projet\\DeepLearning\\NeuralNetworks\\JSON\\my-network_Penalty_LeakyReLU_Adam_Serialized_170_RegresseurTest.json";
+            var serializedNetworkFile = "C:\\Users\\ensimag\\Documents\\GitHub\\DeepLearning\\NeuralNetworks\\JSON\\Serialized\\my-network_Penalty_Sigmoid_Adam_Serialized.json";
+            var outputFile = "C:\\Users\\ensimag\\Documents\\GitHub\\DeepLearning\\NeuralNetworks\\JSON\\Serialized\\result.json";
             var network = LoadNetwork(serializedNetworkFile);
             var tester = new Evaluator(network, new RelativeDifference());
             var testData = LoadData();
