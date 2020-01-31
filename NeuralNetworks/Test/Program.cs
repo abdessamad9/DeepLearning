@@ -78,6 +78,7 @@ namespace TestPricing
             {
                 serializer.Serialize(writer, serialized);
             }
+            fixedL.LearningRate = 0.01;
             network.Layers[0] = new WeightDecay(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), fixedL), 0.1);
             network.Layers[1] = new WeightDecay(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), fixedL), 0.1);
             network.Layers[2] = new WeightDecay(new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), fixedL), 0.1);
@@ -91,7 +92,7 @@ namespace TestPricing
             {
                 serializer.Serialize(writer, serialized);
             }
-
+            fixedL.LearningRate = 0.1;
 
 
             network.Layers[0] = new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), adam);
