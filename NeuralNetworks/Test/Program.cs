@@ -43,7 +43,7 @@ namespace TestPricing
         {
 
             int batchSize = 200;
-            IActivator activator = new Sigmoid(); // Sigmoid();
+            IActivator activator = new Sigmoid(); 
             int numberLayers = 4;
             Network network = new Network(batchSize, numberLayers);
             MomentumParameters mom = new MomentumParameters();
@@ -58,7 +58,7 @@ namespace TestPricing
              network.Layers[3] = new Standard(batchSize, activator, new double[1], rempliMatrice(50,1) , fixedL);
             var serialized = NetworkSerializer.Serialize(network);
             JsonSerializer serializer = new JsonSerializer();
-            var filename = "../../../JSON/my-network_Standard_Sigmoid_FixedL.json"; //"../../../JSON/my-network_Sigmoid_Adam.json";  "../../../my-network_Sigmoid_Momemtum.json";
+            var filename = "../../../JSON/my-network_Standard_Sigmoid_FixedL.json";
             using (StreamWriter sw = new StreamWriter(filename))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
