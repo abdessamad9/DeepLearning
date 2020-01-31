@@ -14,88 +14,8 @@ namespace NeuralNetwork.Layers
     public interface Layer : ILayer
     {
 
+        //Type Qui permet d'avoir le type du Layer
         LayerType Type { get; }
-        /*int layerSize;
       
-
-        int inputSize;
-        public int InputSize
-        {
-            get
-            {
-                return inputSize;
-            }
-            set
-            {
-                this.inputSize = value;
-            }
-        }
-     
-
-        int batchSize;
-        public int BatchSize
-        {
-            get
-            {
-                return batchSize;
-            }
-            set
-            {
-                this.batchSize = value;
-            }
-        }
-
-       
-
-
-
-        public void Propagate(Matrix<double> input)
-            {
-
-            }
-
-
-        public void BackPropagate(Matrix<double> upstreamWeightedErrors)
-        {
-
-        }
-
-  
-        public void UpdateParameters()
-        {
-
-        }
-
-        Matrix<double> activation;
-        public  Matrix<double> Activation
-        {
-            get
-            {
-                return activation;
-            }
-            set
-            {
-                this.activation = value;
-            }
-        }
-
-        public bool Equals(ILayer other)
-        {
-            return LayerSize == other.LayerSize && InputSize == other.InputSize && BatchSize == other.BatchSize;
-        }
-
-        Matrix<double> weightedError;
-        public Matrix<double> WeightedError
-        {
-            get
-            {
-                return weightedError;
-            }
-            set
-            {
-                this.weightedError = value;
-            }
-        }*/
-
     }
 }

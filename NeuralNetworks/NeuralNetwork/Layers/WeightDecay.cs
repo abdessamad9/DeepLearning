@@ -11,7 +11,6 @@ namespace NeuralNetwork.Layers
 {
     public class WeightDecay : Layer
     {
-        //
         public WeightDecay(ILayer layer,  double decayRate)
         {
             UnderlyingLayer = layer;
@@ -127,7 +126,7 @@ namespace NeuralNetwork.Layers
 
         public void UpdateParameters()
         {
-            //Vector<double> res;
+          
             double coefficient = ((Standard)UnderlyingLayer).Computation();
             ((Standard)UnderlyingLayer).UpdateBias(((Standard)UnderlyingLayer).VelocityBias, 1 - decayRate);
             ((Standard)UnderlyingLayer).UpdateWeights(((Standard)UnderlyingLayer).VelocityWeights, 1 - decayRate);

@@ -26,6 +26,10 @@ namespace NeuralNetwork.Serialization
             return serializedNetwork;
         }
 
+        /**
+       * Permet de serialiser un Layer 
+       */
+
         public static ISerializedLayer SerializeLayer(ILayer layer)
         {
             ISerializedLayer seriaLayer;

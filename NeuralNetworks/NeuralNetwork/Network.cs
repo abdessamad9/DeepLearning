@@ -9,7 +9,6 @@ namespace NeuralNetwork
     public sealed class Network : IEquatable<Network>, INetwork
     {
 
-
         public int batchSize;
         
         public int BatchSize
@@ -37,9 +36,6 @@ namespace NeuralNetwork
            
            BatchSize = batchsize;
            this.Layers = new ILayer[numberLayer];
-
-
-
         }
 
 
@@ -86,16 +82,6 @@ namespace NeuralNetwork
 
         public bool Equals(Network other)
         {
-
-            /*  if (Layers.Length != other.Layers.Length)
-              {
-                  return false;
-              }
-              bool res;
-              for (  int i =0; i< Layers.Length; i++)
-              {
-                  res = res && Layers[i].Equals(other.Layers[i]);
-              }*/
             return BatchSize == other.BatchSize && Mode == other.Mode && Output == other.Output && Mode == other.Mode && Layers == other.Layers;
 
         }

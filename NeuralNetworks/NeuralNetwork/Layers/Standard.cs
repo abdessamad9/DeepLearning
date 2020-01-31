@@ -12,7 +12,7 @@ namespace NeuralNetwork.Layers
 {
     public class Standard : Layer
     {
-        //
+        
         public Standard( int batchSize, IActivator activator, double[] bias, double[,] weights, IGradientAdjustmentParameters gradientAdjustmentParameters)
         {
             BatchSize = batchSize;
@@ -377,7 +377,7 @@ namespace NeuralNetwork.Layers
 
         public double Computation()
         {
-            //Vector<double> res;
+            
             var gradW = 1.0 / BatchSize * LastActivation * B.Transpose();
             var gradB = 1.0 / BatchSize * B * Vector<double>.Build.Dense(BatchSize, 1);
             Matrix<double> gradBvect = Matrix<double>.Build.Dense(SBias.RowCount, SBias.ColumnCount, 0);

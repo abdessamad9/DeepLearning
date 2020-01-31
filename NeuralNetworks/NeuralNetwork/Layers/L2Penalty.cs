@@ -128,7 +128,7 @@ namespace NeuralNetwork.Layers
 
         public void UpdateParameters()
         {
-            //Vector<double> res;
+          
            double coefficient = ((Standard)UnderlyingLayer).Computation();
             ((Standard)UnderlyingLayer).UpdateBias(((Standard)UnderlyingLayer).VelocityBias, 1-coefficient*PenaltyCoefficient);
             ((Standard)UnderlyingLayer).UpdateWeights(((Standard)UnderlyingLayer).VelocityWeights, 1 - coefficient * PenaltyCoefficient);

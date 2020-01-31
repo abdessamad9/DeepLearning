@@ -14,20 +14,17 @@ namespace NeuralNetwork.Serialization
         public static Network Deserialize(SerializedNetwork serializedNetwork)
         {
             Network network = new Network( serializedNetwork.BatchSize, serializedNetwork.SerializedLayers.Length );
-
-            
-            // Console.WriteLine("serializedNetwork.BatchSize" +serializedNetwork.BatchSize);
             for (int i = 0 ; i < serializedNetwork.SerializedLayers.Length; i++)
             {
                 network.Layers[i] = DeserializeLayer(serializedNetwork.SerializedLayers[i], network.BatchSize);    
             }
             network.Output = Matrix<double>.Build.Dense(network.Layers[network.Layers.Length -1].Activation.RowCount , network.Layers[network.Layers.Length -1].Activation.ColumnCount);
-
-   
             return network;
         }
 
-
+        /**
+         * Permet de deserialiser un Layer serialiser
+         */
         public static ILayer DeserializeLayer(ISerializedLayer seLayer, int batchSize)
         {
             IActivator activator;
@@ -58,15 +55,7 @@ namespace NeuralNetwork.Serialization
                     activator = ActivatorNew(under2.ActivatorType);
                     layer = new WeightDecay(layerUnder2, weightDecay.DecayRate);
                     return layer;
-                /** case LayerType.Dropout:
-                     SerializedDropoutLayer dropoutLayer  = (SerializedDropoutLayer)seLayer;
-                     layer = new Dropout(dropoutLayer.LayerSize, input, batchSize, activator, biais, activation, weightedError);
-                     return layer;
-                
-                 case LayerType.InputStandardizing:
-                     SerializedInputStandardizingLayer inputStandard = (SerializedInputStandardizingLayer)seLayer;
-                     layer = new InputStandardizing(inputStandard.LayerSize, input, batchSize, activator, biais, activation, weightedError);
-                     return layer;*/
+               
                 default:
                     return null;
             }
@@ -74,6 +63,9 @@ namespace NeuralNetwork.Serialization
         }
 
 
+        /**
+         * Renvoie la bonne fonction d'activation en fonction du type
+         */
         public static IActivator ActivatorNew(ActivatorType type)
         {
             switch (type)
