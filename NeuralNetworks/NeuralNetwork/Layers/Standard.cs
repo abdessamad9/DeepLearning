@@ -13,9 +13,8 @@ namespace NeuralNetwork.Layers
     public class Standard : Layer
     {
         //
-        public Standard( int batchSize, IActivator activator, double[] bias, double[,] weights, IGradientAdjustmentParameters gradientAdjustmentParameters, double indiceLayer)
+        public Standard( int batchSize, IActivator activator, double[] bias, double[,] weights, IGradientAdjustmentParameters gradientAdjustmentParameters)
         {
-
             BatchSize = batchSize;
             LayerSize = bias.Length;
             InputSize = weights.GetLength(0);
@@ -41,20 +40,6 @@ namespace NeuralNetwork.Layers
             SPBias = Matrix<double>.Build.Dense(Bias.RowCount, Bias.ColumnCount, 0);
             RPWeights = Matrix<double>.Build.Dense(Weights.RowCount, Weights.ColumnCount, 0);
             RPBias = Matrix<double>.Build.Dense(Bias.RowCount, Bias.ColumnCount, 0);
-
-            IndiceLayer = indiceLayer;
-        }
-        double indiceLayer;
-        public double IndiceLayer
-        {
-            get
-            {
-                return indiceLayer;
-            }
-            set
-            {
-                this.indiceLayer = value;
-            }
         }
         Matrix<double> rPBias;
         public Matrix<double> RPBias
@@ -401,9 +386,9 @@ namespace NeuralNetwork.Layers
                     var g2 = gradW.PointwiseMultiply(gradW);
                     RWeights.Add((1.0 - ((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay) * g2, RWeights);
                     SWeights.CopyTo(SPWeights);
-                    SPWeights.Multiply(1.0 / (1.0 - Math.Pow(((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay, IndiceLayer)), SPWeights);
+                    SPWeights.Multiply(1.0 / (1.0 - ((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay), SPWeights);
                     RWeights.CopyTo(RPWeights);
-                    RPWeights.Multiply(1.0 / (1.0 - Math.Pow(((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay, IndiceLayer)), RPWeights);
+                    RPWeights.Multiply(1.0 / (1.0 - ((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay), RPWeights);
                     SPWeights.Multiply(-coefficient, SPWeights);
                     var sqrtrp = RPWeights.Clone();
                     RPWeights.Map(Math.Sqrt, sqrtrp);
@@ -417,9 +402,9 @@ namespace NeuralNetwork.Layers
                     var gB2 = gradBvect.PointwiseMultiply(gradBvect);
                     RBias.Add((1.0 - ((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay) * gB2, RBias);
                     SBias.CopyTo(SPBias);
-                    SPBias.Multiply(1.0 / (1.0 - Math.Pow(((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay, IndiceLayer)), SPBias);
+                    SPBias.Multiply(1.0 / (1.0 - ((AdamParameters)(GradientAdjustmentParameters)).FirstMomentDecay), SPBias);
                     RBias.CopyTo(RPBias);
-                    RPBias.Multiply(1.0 / (1.0 - Math.Pow(((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay, IndiceLayer)), RPBias);
+                    RPBias.Multiply(1.0 / (1.0 - ((AdamParameters)(GradientAdjustmentParameters)).SecondMomentDecay), RPBias);
                     SPBias.Multiply(-coefficient, SPBias);
                     var sqrtrpB = RPBias.Clone();
                     RPBias.Map(Math.Sqrt, sqrtrpB);

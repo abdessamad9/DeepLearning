@@ -42,18 +42,7 @@ namespace NeuralNetwork.Layers
                 this.underlyingLayer = value;
             }
         }
-        double indiceLayer;
-        public double IndiceLayer
-        {
-            get
-            {
-                return indiceLayer;
-            }
-            set
-            {
-                this.indiceLayer = value;
-            }
-        }
+        
 
         public int LayerSize
         {

@@ -7,27 +7,45 @@ using NeuralNetwork.Common.Activators;
 using NeuralNetwork.Common.GradientAdjustmentParameters;
 using NeuralNetwork.Common.GradientAdjustmentsParameters;
 using NeuralNetwork.Common.Layers;
+
 namespace NeuralNetwork.Layers
 {
-    public class WeightDecay : Layer
+    public class InputStadardizing : Layer
     {
-        //
-        public WeightDecay(ILayer layer,  double decayRate)
+        public InputStadardizing(ILayer layer, double[] mean, double[] stdDev)
         {
             UnderlyingLayer = layer;
-            DecayRate = decayRate;
+            Mean = Matrix<double>.Build.Dense(this.underlyingLayer.InputSize, this.underlyingLayer.BatchSize,0.0 );
+            StdDev = Matrix<double>.Build.Dense(this.underlyingLayer.InputSize, this.underlyingLayer.BatchSize, 0.0);
+            for (int i=0; i < this.underlyingLayer.BatchSize; i++)
+            {
+                Mean.SetColumn(i, mean);
+                StdDev.SetColumn(i, stdDev);
+            }
         }
 
-        double decayRate;
-        public double DecayRate
+        Matrix<double> mean;
+        public Matrix<double> Mean
         {
             get
             {
-                return decayRate;
+                return mean;
             }
             set
             {
-                this.decayRate = value;
+                this.mean = value;
+            }
+        }
+        Matrix<double> stdDev;
+        public Matrix<double> StdDev
+        {
+            get
+            {
+                return stdDev;
+            }
+            set
+            {
+                this.stdDev = value;
             }
         }
 
@@ -107,11 +125,12 @@ namespace NeuralNetwork.Layers
 
         }
 
+        LayerType type;
         public LayerType Type
         {
             get
             {
-                return LayerType.WeightDecay;
+                return LayerType.InputStandardizing;
             }
         }
 
@@ -122,22 +141,33 @@ namespace NeuralNetwork.Layers
 
         public void Propagate(Matrix<double> input)
         {
-            UnderlyingLayer.Propagate(input);
+            /*Vector<double> m = input.RowSums();
+            m.Divide(input.ColumnCount,m);
+            Vector<double> std = input.RowSums();
+            for (int i = 0; i < input.ColumnCount; i++)
+            {
+                std.Add(input.Column(i) * input.Column(i));
+            }
+            std.Add(-m*m);
+            for (int i = 0; i < input.ColumnCount; i++)
+            {
+                input.SetColumn(i,input.Column(i) - m);
+            }
+            input.Subtract(Mean,input);
+            input.PointwiseDivide(StdDev, input);
+            UnderlyingLayer.Propagate(input);*/
         }
 
         public void UpdateParameters()
         {
-            //Vector<double> res;
             double coefficient = ((Standard)UnderlyingLayer).Computation();
-            ((Standard)UnderlyingLayer).UpdateBias(((Standard)UnderlyingLayer).VelocityBias, 1 - decayRate);
-            ((Standard)UnderlyingLayer).UpdateWeights(((Standard)UnderlyingLayer).VelocityWeights, 1 - decayRate);
+            ((Standard)UnderlyingLayer).UpdateBias(((Standard)UnderlyingLayer).VelocityBias, 1);
+            ((Standard)UnderlyingLayer).UpdateWeights(((Standard)UnderlyingLayer).VelocityWeights,1);
         }
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
             UnderlyingLayer.BackPropagate(upstreamWeightedErrors);
 
         }
-
-
     }
 }

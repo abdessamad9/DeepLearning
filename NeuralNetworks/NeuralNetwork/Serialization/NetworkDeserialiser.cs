@@ -19,8 +19,7 @@ namespace NeuralNetwork.Serialization
             // Console.WriteLine("serializedNetwork.BatchSize" +serializedNetwork.BatchSize);
             for (int i = 0 ; i < serializedNetwork.SerializedLayers.Length; i++)
             {
-                network.Layers[i] = DeserializeLayer(serializedNetwork.SerializedLayers[i], network.BatchSize, i+1);
-                
+                network.Layers[i] = DeserializeLayer(serializedNetwork.SerializedLayers[i], network.BatchSize);    
             }
             network.Output = Matrix<double>.Build.Dense(network.Layers[network.Layers.Length -1].Activation.RowCount , network.Layers[network.Layers.Length -1].Activation.ColumnCount);
 
@@ -29,7 +28,7 @@ namespace NeuralNetwork.Serialization
         }
 
 
-        public static ILayer DeserializeLayer(ISerializedLayer seLayer, int batchSize, double indice)
+        public static ILayer DeserializeLayer(ISerializedLayer seLayer, int batchSize)
         {
             IActivator activator;
             ILayer layer;
@@ -40,14 +39,14 @@ namespace NeuralNetwork.Serialization
                     SerializedStandardLayer standard = (SerializedStandardLayer)seLayer;
                     
                     activator = ActivatorNew(standard.ActivatorType);
-                    layer = new Standard(batchSize, activator, standard.Bias, standard.Weights, standard.GradientAdjustmentParameters, indice);
+                    layer = new Standard(batchSize, activator, standard.Bias, standard.Weights, standard.GradientAdjustmentParameters);
 
                     return layer;
                 case LayerType.L2Penalty:
                     SerializedL2PenaltyLayer l2penalty = (SerializedL2PenaltyLayer)seLayer;
                     SerializedStandardLayer under = (SerializedStandardLayer)(l2penalty.UnderlyingSerializedLayer);
                     activator = ActivatorNew(under.ActivatorType);
-                    Standard layerUnder = new Standard(batchSize,activator, under.Bias, under.Weights, under.GradientAdjustmentParameters, indice);
+                    Standard layerUnder = new Standard(batchSize,activator, under.Bias, under.Weights, under.GradientAdjustmentParameters);
                     activator = ActivatorNew(under.ActivatorType);
                     layer = new L2Penalty(layerUnder, l2penalty.PenaltyCoefficient);
                     return layer;
@@ -55,7 +54,7 @@ namespace NeuralNetwork.Serialization
                     SerializedWeightDecayLayer weightDecay = (SerializedWeightDecayLayer)seLayer;
                     SerializedStandardLayer under2 = (SerializedStandardLayer)(weightDecay.UnderlyingSerializedLayer);
                     activator = ActivatorNew(under2.ActivatorType);
-                    Standard layerUnder2 = new Standard(batchSize, activator, under2.Bias, under2.Weights, under2.GradientAdjustmentParameters, indice);
+                    Standard layerUnder2 = new Standard(batchSize, activator, under2.Bias, under2.Weights, under2.GradientAdjustmentParameters);
                     activator = ActivatorNew(under2.ActivatorType);
                     layer = new WeightDecay(layerUnder2, weightDecay.DecayRate);
                     return layer;

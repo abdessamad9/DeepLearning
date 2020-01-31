@@ -52,10 +52,10 @@ namespace TestPricing
             FixedLearningRateParameters fixedL = new FixedLearningRateParameters(0.1);
             AdamParameters adam = new AdamParameters(0.01, 0.9, 0.99, 0.0000001);
 
-             network.Layers[0] = new Standard(batchSize, activator, new double[200], rempliMatrice(7,200), fixedL,1);
-             network.Layers[1] = new Standard(batchSize, activator, new double[130], rempliMatrice(200,130), fixedL,2);
-             network.Layers[2] = new Standard(batchSize, activator, new double[50], rempliMatrice( 130,50), fixedL,3);
-             network.Layers[3] = new Standard(batchSize, activator, new double[1], rempliMatrice(50,1) , fixedL,4);
+             network.Layers[0] = new Standard(batchSize, activator, new double[200], rempliMatrice(7,200), fixedL);
+             network.Layers[1] = new Standard(batchSize, activator, new double[130], rempliMatrice(200,130), fixedL);
+             network.Layers[2] = new Standard(batchSize, activator, new double[50], rempliMatrice( 130,50), fixedL);
+             network.Layers[3] = new Standard(batchSize, activator, new double[1], rempliMatrice(50,1) , fixedL);
             var serialized = NetworkSerializer.Serialize(network);
             JsonSerializer serializer = new JsonSerializer();
             var filename = "../../../JSON/my-network_Standard_Sigmoid_FixedL.json"; //"../../../JSON/my-network_Sigmoid_Adam.json";  "../../../my-network_Sigmoid_Momemtum.json";
@@ -65,10 +65,10 @@ namespace TestPricing
                 serializer.Serialize(writer, serialized);
             }
 
-            network.Layers[0] = new L2Penalty(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), fixedL, 1), 0.1);
-              network.Layers[1] = new L2Penalty(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), fixedL, 2),  0.1);
-              network.Layers[2] = new L2Penalty( new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), fixedL, 3),  0.1);
-              network.Layers[3] = new L2Penalty( new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), fixedL, 4),0.1);
+            network.Layers[0] = new L2Penalty(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), fixedL), 0.1);
+              network.Layers[1] = new L2Penalty(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), fixedL),  0.1);
+              network.Layers[2] = new L2Penalty( new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), fixedL),  0.1);
+              network.Layers[3] = new L2Penalty( new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), fixedL),0.1);
 
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
@@ -78,10 +78,10 @@ namespace TestPricing
             {
                 serializer.Serialize(writer, serialized);
             }
-            network.Layers[0] = new WeightDecay(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), fixedL, 1), 0.1);
-            network.Layers[1] = new WeightDecay(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), fixedL, 2), 0.1);
-            network.Layers[2] = new WeightDecay(new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), fixedL, 3), 0.1);
-            network.Layers[3] = new WeightDecay(new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), fixedL, 4), 0.1);
+            network.Layers[0] = new WeightDecay(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), fixedL), 0.1);
+            network.Layers[1] = new WeightDecay(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), fixedL), 0.1);
+            network.Layers[2] = new WeightDecay(new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), fixedL), 0.1);
+            network.Layers[3] = new WeightDecay(new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), fixedL), 0.1);
 
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
@@ -94,10 +94,10 @@ namespace TestPricing
 
 
 
-            network.Layers[0] = new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), adam, 1);
-              network.Layers[1] = new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), adam, 2);
-              network.Layers[2] = new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), adam, 3);
-              network.Layers[3] = new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), adam, 4);
+            network.Layers[0] = new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), adam);
+              network.Layers[1] = new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), adam);
+              network.Layers[2] = new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), adam);
+              network.Layers[3] = new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), adam);
 
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
@@ -108,10 +108,10 @@ namespace TestPricing
                 serializer.Serialize(writer, serialized);
             }
 
-            network.Layers[0] = new L2Penalty(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), adam, 1), 0.1);
-             network.Layers[1] = new L2Penalty(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), adam, 2),   0.1);
-             network.Layers[2] = new L2Penalty( new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), adam, 3),  0.1);
-             network.Layers[3] = new L2Penalty( new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), adam, 4), 0.1);
+            network.Layers[0] = new L2Penalty(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), adam), 0.1);
+             network.Layers[1] = new L2Penalty(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), adam),   0.1);
+             network.Layers[2] = new L2Penalty( new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), adam),  0.1);
+             network.Layers[3] = new L2Penalty( new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), adam), 0.1);
 
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
@@ -122,10 +122,10 @@ namespace TestPricing
                 serializer.Serialize(writer, serialized);
             }
 
-            network.Layers[0] = new WeightDecay(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), adam, 1), 0.1);
-            network.Layers[1] = new WeightDecay(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), adam, 2), 0.1);
-            network.Layers[2] = new WeightDecay(new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), adam, 3), 0.1);
-            network.Layers[3] = new WeightDecay(new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), adam, 4), 0.1);
+            network.Layers[0] = new WeightDecay(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), adam), 0.1);
+            network.Layers[1] = new WeightDecay(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), adam), 0.1);
+            network.Layers[2] = new WeightDecay(new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), adam), 0.1);
+            network.Layers[3] = new WeightDecay(new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), adam), 0.1);
 
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
@@ -138,10 +138,10 @@ namespace TestPricing
 
 
 
-            network.Layers[0] = new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), mom, 1);
-               network.Layers[1] = new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), mom, 2);
-               network.Layers[2] = new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), mom, 3);
-               network.Layers[3] = new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), mom, 4);
+            network.Layers[0] = new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), mom);
+               network.Layers[1] = new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), mom);
+               network.Layers[2] = new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), mom);
+               network.Layers[3] = new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), mom);
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
             filename = "../../../JSON/my-network_Standard_Sigmoid_Mom.json";
@@ -151,10 +151,10 @@ namespace TestPricing
                 serializer.Serialize(writer, serialized);
             }
 
-            network.Layers[0] = new L2Penalty(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), mom, 1),  0.1);
-            network.Layers[1] = new L2Penalty(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), mom, 2), 0.1);
-            network.Layers[2] = new L2Penalty(new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), mom, 3), 0.1);
-            network.Layers[3] = new L2Penalty(new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), mom, 4), 0.1);
+            network.Layers[0] = new L2Penalty(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), mom),  0.1);
+            network.Layers[1] = new L2Penalty(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), mom), 0.1);
+            network.Layers[2] = new L2Penalty(new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), mom), 0.1);
+            network.Layers[3] = new L2Penalty(new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), mom), 0.1);
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
             filename = "../../../JSON/my-network_Penalty_Sigmoid_Mom.json";
@@ -166,10 +166,10 @@ namespace TestPricing
 
 
 
-            network.Layers[0] = new WeightDecay(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), mom, 1), 0.1);
-            network.Layers[1] = new WeightDecay(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), mom, 2), 0.1);
-            network.Layers[2] = new WeightDecay(new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), mom, 3), 0.1);
-            network.Layers[3] = new WeightDecay(new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), mom, 4), 0.1);
+            network.Layers[0] = new WeightDecay(new Standard(batchSize, activator, new double[200], rempliMatrice(7, 200), mom), 0.1);
+            network.Layers[1] = new WeightDecay(new Standard(batchSize, activator, new double[130], rempliMatrice(200, 130), mom), 0.1);
+            network.Layers[2] = new WeightDecay(new Standard(batchSize, activator, new double[50], rempliMatrice(130, 50), mom), 0.1);
+            network.Layers[3] = new WeightDecay(new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), mom), 0.1);
 
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
