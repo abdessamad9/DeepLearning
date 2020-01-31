@@ -47,7 +47,7 @@ namespace TestPricing
             int numberLayers = 4;
             Network network = new Network(batchSize, numberLayers);
             MomentumParameters mom = new MomentumParameters();
-            mom.LearningRate = 0.1;
+            mom.LearningRate = 0.01;
             mom.Momentum = 0.5;
             FixedLearningRateParameters fixedL = new FixedLearningRateParameters(0.1);
             AdamParameters adam = new AdamParameters(0.001, 0.9, 0.99, 0.00000001);
