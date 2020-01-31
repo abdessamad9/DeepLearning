@@ -287,7 +287,25 @@ namespace NeuralNetwork.Layers
             }
             set
             {
+                if (Bias != null)
+                {
+                    Vector<double> bias = Bias.Column(0);
+                    Bias = Matrix<double>.Build.Dense(Bias.RowCount, value, 0);
+                    for (int i = 0; i < value; i++)
+                    {
+                        Bias.SetColumn(i, bias);
+                    }
+                    B = Matrix<double>.Build.Dense(LayerSize, value, 0);
+                    WeightedError = Matrix<double>.Build.Dense(Weights.RowCount, B.ColumnCount, 0);
+                    Activation = Matrix<double>.Build.Dense(LayerSize, value, 0);
+                    VelocityBias = Matrix<double>.Build.Dense(Bias.RowCount, Bias.ColumnCount, 0);
+                    SBias = Matrix<double>.Build.Dense(Bias.RowCount, Bias.ColumnCount, 0);
+                    RBias = Matrix<double>.Build.Dense(Bias.RowCount, Bias.ColumnCount, 0);
+                    SPBias = Matrix<double>.Build.Dense(Bias.RowCount, Bias.ColumnCount, 0);
+                    RPBias = Matrix<double>.Build.Dense(Bias.RowCount, Bias.ColumnCount, 0);
+                }
                 this.batchSize = value;
+
             }
         }
         Matrix<double> zeta;

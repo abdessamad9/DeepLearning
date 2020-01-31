@@ -20,12 +20,21 @@ namespace NeuralNetwork
             }
             set
             {
+                if (layers != null)
+                {
+                    for (int i = 0; i < Layers.Length; i++)
+                    {
+                        Layers[i].BatchSize = value;
+
+                    }
+                }
                 this.batchSize = value;
             }
 
         }
 
         public Network (int batchsize, int numberLayer){
+           
            BatchSize = batchsize;
            this.Layers = new ILayer[numberLayer];
 

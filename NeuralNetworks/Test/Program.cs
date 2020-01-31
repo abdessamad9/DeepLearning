@@ -50,7 +50,7 @@ namespace TestPricing
             mom.LearningRate = 0.1;
             mom.Momentum = 0.5;
             FixedLearningRateParameters fixedL = new FixedLearningRateParameters(0.1);
-            AdamParameters adam = new AdamParameters(0.01, 0.9, 0.99, 0.0000001);
+            AdamParameters adam = new AdamParameters(0.001, 0.9, 0.99, 0.00000001);
 
              network.Layers[0] = new Standard(batchSize, activator, new double[200], rempliMatrice(7,200), fixedL);
              network.Layers[1] = new Standard(batchSize, activator, new double[130], rempliMatrice(200,130), fixedL);
