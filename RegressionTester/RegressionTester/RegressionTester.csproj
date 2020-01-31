@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
@@ -17,10 +17,10 @@
       <HintPath>..\..\NeuralNetworks\DataProviders\obj\x64\Debug\netstandard2.0\DataProviders.dll</HintPath>
     </Reference>
     <Reference Include="NeuralNetwork">
-      <HintPath>..\..\NeuralNetworks\NeuralNetwork\obj\x64\Debug\netstandard2.0\NeuralNetwork.dll</HintPath>
+      <HintPath>..\..\NeuralNetworks\NeuralNetwork\obj\Debug\netstandard2.0\NeuralNetwork.dll</HintPath>
     </Reference>
     <Reference Include="NeuralNetwork.Common">
-      <HintPath>..\..\NeuralNetworks\NeuralNetwork.Common\obj\x64\Debug\netstandard2.0\NeuralNetwork.Common.dll</HintPath>
+      <HintPath>..\..\NeuralNetworks\NeuralNetwork.Common\obj\Debug\netstandard2.0\NeuralNetwork.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
 
