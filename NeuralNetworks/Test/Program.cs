@@ -43,7 +43,7 @@ namespace TestPricing
         {
 
             int batchSize = 200;
-            IActivator activator = new Sigmoid(); // Sigmoid();
+            IActivator activator = new Tanh(); // Tanh();
             int numberLayers = 4;
             Network network = new Network(batchSize, numberLayers);
             MomentumParameters mom = new MomentumParameters();
@@ -58,7 +58,7 @@ namespace TestPricing
              network.Layers[3] = new Standard(batchSize, activator, new double[1], rempliMatrice(50,1) , fixedL,4);
             var serialized = NetworkSerializer.Serialize(network);
             JsonSerializer serializer = new JsonSerializer();
-            var filename = "../../../JSON/my-network_Standard_Sigmoid_FixedL.json"; //"../../../JSON/my-network_Sigmoid_Adam.json";  "../../../my-network_Sigmoid_Momemtum.json";
+            var filename = "../../../JSON/my-network_Standard_Tanh_FixedL.json"; //"../../../JSON/my-network_Tanh_Adam.json";  "../../../my-network_Tanh_Momemtum.json";
             using (StreamWriter sw = new StreamWriter(filename))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
@@ -72,7 +72,7 @@ namespace TestPricing
 
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
-            filename = "../../../JSON/my-network_Penalty_Sigmoid_Fixed.json"; 
+            filename = "../../../JSON/my-network_Penalty_Tanh_Fixed.json"; 
             using (StreamWriter sw = new StreamWriter(filename))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
@@ -85,7 +85,7 @@ namespace TestPricing
 
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
-            filename = "../../../JSON/my-network_WeightDecay_Sigmoid_Fixed.json";
+            filename = "../../../JSON/my-network_WeightDecay_Tanh_Fixed.json";
             using (StreamWriter sw = new StreamWriter(filename))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
@@ -101,7 +101,7 @@ namespace TestPricing
 
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
-            filename = "../../../JSON/my-network_Standard_Sigmoid_Adam.json";
+            filename = "../../../JSON/my-network_Standard_Tanh_Adam.json";
             using (StreamWriter sw = new StreamWriter(filename))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
@@ -115,7 +115,7 @@ namespace TestPricing
 
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
-            filename = "../../../JSON/my-network_Penalty_Sigmoid_Adam.json";
+            filename = "../../../JSON/my-network_Penalty_Tanh_Adam.json";
             using (StreamWriter sw = new StreamWriter(filename))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
@@ -129,7 +129,7 @@ namespace TestPricing
 
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
-            filename = "../../../JSON/my-network_WeightDecay_Sigmoid_Adam.json";
+            filename = "../../../JSON/my-network_WeightDecay_Tanh_Adam.json";
             using (StreamWriter sw = new StreamWriter(filename))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
@@ -144,7 +144,7 @@ namespace TestPricing
                network.Layers[3] = new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), mom, 4);
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
-            filename = "../../../JSON/my-network_Standard_Sigmoid_Mom.json";
+            filename = "../../../JSON/my-network_Standard_Tanh_Mom.json";
             using (StreamWriter sw = new StreamWriter(filename))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
@@ -157,7 +157,7 @@ namespace TestPricing
             network.Layers[3] = new L2Penalty(new Standard(batchSize, activator, new double[1], rempliMatrice(50, 1), mom, 4), 0.1);
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
-            filename = "../../../JSON/my-network_Penalty_Sigmoid_Mom.json";
+            filename = "../../../JSON/my-network_Penalty_Tanh_Mom.json";
             using (StreamWriter sw = new StreamWriter(filename))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
@@ -173,7 +173,7 @@ namespace TestPricing
 
             serialized = NetworkSerializer.Serialize(network);
             serializer = new JsonSerializer();
-            filename = "../../../JSON/my-network_WeightDecay_Sigmoid_mom.json";
+            filename = "../../../JSON/my-network_WeightDecay_Tanh_mom.json";
             using (StreamWriter sw = new StreamWriter(filename))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
